@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contáctanos - Alquiler de Locales Deportivos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+        .contact-form {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .contact-form h2 {
+            color: #333;
+            font-weight: 600;
+        }
+        .contact-form label {
+            font-weight: 500;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #0a8043;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1rem;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #ff7f50;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <header>
+        <div class="logo">Space Sport</div>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="acercadeNosotros.html">Nosotros</a>
+            <a href="#">Reservar Cancha</a>
+            <a href="#">Dueño de Cancha</a>
+            <a href="contactanos.html">Contacto</a>
+        </nav>
+        <a href="#" class="admin-button">Administra tu cancha</a>
+    </header>
+    <!-- Encabezado de la página -->
+    <header class="bg-dark text-white text-center py-5">
+        <h1>Contáctanos</h1>
+        <p>¿Tienes alguna pregunta o necesitas más información? ¡Estamos aquí para ayudarte!</p>
+    </header>
+
+    <!-- Sección de formulario de contacto -->
+    <section class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="contact-form">
+                    <h2 class="text-center mb-4">Envíanos un mensaje</h2>
+                    <form action="#" method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nombre Completo</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Tu nombre completo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Tu correo electrónico" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Número de Teléfono</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Tu número de teléfono" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Asunto</label>
+                            <input type="text" class="form-control" id="subject" name="subject" placeholder="Asunto de tu mensaje" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Mensaje</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-custom btn-lg">Enviar Mensaje</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pie de página -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2024 Alquiler de Locales Deportivos. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

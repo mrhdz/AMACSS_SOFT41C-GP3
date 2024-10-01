@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Sport - Reserva tu cancha favorita</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #0a8043;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1rem;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #ff7f50;
+        }
+        .admin-button {
+            background-color: #ff7f50;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .admin-button:hover {
+            background-color: #ff6b3d;
+        }
+        .hero {
+            background-image: url('img/prueba.webp');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+        }
+        .hero-content {
+            color: white;
+            max-width: 50%;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .orange-text {
+            color: #ff7f50;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .app-buttons img {
+            height: 40px;
+            margin-right: 1rem;
+        }
+        .hero-image {
+            max-width: 40%;
+        }
+        .hero-image img {
+            max-width: 100%;
+        }
+        .features {
+            display: flex;
+            padding: 5% 10%;
+            background-color: #f0f0f0;
+        }
+        .features-image {
+            flex: 1;
+            position: relative;
+        }
+        .features-image img {
+            max-width: 100%;
+        }
+        .features-content {
+            flex: 1;
+            padding-left: 5%;
+        }
+        .subtitle {
+            color: #ff7f50;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        .features h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .feature {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .feature-icon {
+            background-color: #ff7f50;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 1rem;
+        }
+        .learn-more-btn {
+            background-color: #4a0e4e;
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .learn-more-btn:hover {
+            background-color: #3a0b3e;
+        }
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ff7f50;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+        .scroll-top:hover {
+            background-color: #ff6b3d;
+        }
+        .benefits {
+            background-color: #ffffff;
+            padding: 5% 10%;
+            text-align: center;
+        }
+        .benefits h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .benefit-card {
+            background-color: #f0f0f0;
+            padding: 2rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        .benefit-card:hover {
+            transform: scale(1.05);
+        }
+        .benefit-icon {
+            font-size: 3rem;
+            color: #ff7f50;
+            margin-bottom: 1rem;
+        }
+        .benefit-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .benefit-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Space Sport</div>
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="acercadeNosotros.html">Nosotros</a>
+            <a href="#">Reservar Cancha</a>
+            <a href="#">Dueño de Cancha</a>
+            <a href="contactanos.html">Contacto</a>
+        </nav>
+        <a href="#" class="admin-button">Administra tu cancha</a>
+    </header>
+    <main class="hero">
+        <div class="hero-content">
+            <h1>Reservar tu cancha favorita <span class="orange-text">nunca fue tan fácil</span></h1>
+            <p>Con FairPlay reserva tu cancha en minutos y disfruta con tus amigos al toque!</p>
+            <div class="app-buttons">
+                <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store"></a>
+                <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play"></a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="img/1.png" alt="FairPlay App">
+        </div>
+    </main>
+    <section class="features">
+        <div class="features-image">
+            <img src="img/1.png" alt="FairPlay App Interface">
+        </div>
+        <div class="features-content">
+            <p class="subtitle">Juega y Disfruta!</p>
+            <h2>¡No demores en buscar y organizar el deporte que te apasiona!</h2>
+            <p>Somos una aplicación de reserva de espacios deportivos, totalmente amigable y fácil de usar, para que el deportista ahorre tiempo en su búsqueda y se enfoque solamente en divertirse y pasarla bien.</p>
+            <div class="feature">
+                <div class="feature-icon">📍</div>
+                <div>
+                    <h3>Busca el campo más cercano a tu ubicación.</h3>
+                    <p>Olvídate de las llamadas sin responder o chatear por whatsapp por horas. con Fairplay App podrás Encontrar tu cancha favorita más cercana a tu ubicación y reservarla en menos de 3 minutos.</p>
+                </div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🏆</div>
+                <div>
+                    <h3>Beneficios exclusivos para deportistas exclusivos.</h3>
+                    <p>Reservar campos deportivos es el primer paso. Accede a varios beneficios en marcas de ropa deportiva para seguir viviendo tu pasión al límite.</p>
+                </div>
+            </div>
+            <button class="learn-more-btn">Saber Más</button>
+        </div>
+    </section>
+    <section class="benefits">
+        <p class="subtitle">Te Brindamos</p>
+        <h2>Increibles Beneficios</h2>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">✏️</div>
+                <h3 class="benefit-title">Registro Facil</h3>
+                <p class="benefit-description">Ingreso al aplicativo con un usuario de google o facebook.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🛡️</div>
+                <h3 class="benefit-title">Seguridad al 100%</h3>
+                <p class="benefit-description">Tu información está a salvo con nosotros.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">👥</div>
+                <h3 class="benefit-title">Atención personalizada</h3>
+                <p class="benefit-description">Podrás contactarte con los dueños de canchas deportivas.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🏀</div>
+                <h3 class="benefit-title">Variedad de deportes</h3>
+                <p class="benefit-description">Tenemos más de 5 categorías de deportes para ti.</p>
+            </div>
+        </div>
+    </section>
+    <a href="#" class="scroll-top">↑</a>
+</body>
+</html>
