@@ -3,268 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space Sport - Reserva tu cancha favorita</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-        header {
-            background-color: #0a8043;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin-left: 1rem;
-            transition: color 0.3s ease;
-        }
-        nav a:hover {
-            color: #ff7f50;
-        }
-        .admin-button {
-            background-color: #ff7f50;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-        .admin-button:hover {
-            background-color: #ff6b3d;
-        }
-        .hero {
-            background-image: url('img/prueba.webp');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 5%;
-        }
-        .hero-content {
-            color: white;
-            max-width: 50%;
-        }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        .orange-text {
-            color: #ff7f50;
-        }
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-        .app-buttons img {
-            height: 40px;
-            margin-right: 1rem;
-        }
-        .hero-image {
-            max-width: 40%;
-        }
-        .hero-image img {
-            max-width: 100%;
-        }
-        .features {
-            display: flex;
-            padding: 5% 10%;
-            background-color: #f0f0f0;
-        }
-        .features-image {
-            flex: 1;
-            position: relative;
-        }
-        .features-image img {
-            max-width: 100%;
-        }
-        .features-content {
-            flex: 1;
-            padding-left: 5%;
-        }
-        .subtitle {
-            color: #ff7f50;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-        }
-        .features h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        .feature {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-        .feature-icon {
-            background-color: #ff7f50;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 1rem;
-        }
-        .learn-more-btn {
-            background-color: #4a0e4e;
-            color: white;
-            padding: 0.75rem 2rem;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .learn-more-btn:hover {
-            background-color: #3a0b3e;
-        }
-        .scroll-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #ff7f50;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-decoration: none;
-            font-size: 1.5rem;
-            transition: background-color 0.3s ease;
-        }
-        .scroll-top:hover {
-            background-color: #ff6b3d;
-        }
-        .benefits {
-            background-color: #ffffff;
-            padding: 5% 10%;
-            text-align: center;
-        }
-        .benefits h2 {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-        }
-        .benefits-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-        }
-        .benefit-card {
-            background-color: #f0f0f0;
-            padding: 2rem;
-            border-radius: 10px;
-            transition: transform 0.3s ease;
-        }
-        .benefit-card:hover {
-            transform: scale(1.05);
-        }
-        .benefit-icon {
-            font-size: 3rem;
-            color: #ff7f50;
-            margin-bottom: 1rem;
-        }
-        .benefit-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        .benefit-description {
-            font-size: 0.9rem;
-            color: #666;
-        }
-    </style>
+    <title>Sport Space - Reserva tu cancha al instante</title>
+    <link rel="icon" href="img/logo blanco.png" type="image/x-icon">
+    <link rel="stylesheet" href="estilos/indexstyle.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="logo">Space Sport</div>
-        <nav>
-            <a href="index.html">Inicio</a>
-            <a href="acercadeNosotros.html">Nosotros</a>
-            <a href="#">Reservar Cancha</a>
-            <a href="#">Dueño de Cancha</a>
-            <a href="contactanos.html">Contacto</a>
-        </nav>
-        <a href="#" class="admin-button">Administra tu cancha</a>
+    <!-- Background image -->
+<div class="position-absolute top-0 start-0 w-100 h-100">
+    <img src="img/background.jpg" class="img-fluid w-100 h-100" style="object-fit: cover;">
+</div>
+
+<!-- Container principal -->
+<div class="container position-relative z-1 min-vh-100 d-flex flex-column">
+    <!-- Header -->
+    <header class="d-flex justify-content-between align-items-center py-3">
+        <a href="index.html">
+            <img src="img/logo amarillo.png" alt="ATC Logo" class="img-fluid" style="width: 90px;">
+        </a>
+        <div>
+            <a href="#" class="btn btn-light text-success fw-bold">Iniciar sesión</a>
+        </div>
     </header>
-    <main class="hero">
-        <div class="hero-content">
-            <h1>Reservar tu cancha favorita <span class="orange-text">nunca fue tan fácil</span></h1>
-            <p>Con FairPlay reserva tu cancha en minutos y disfruta con tus amigos al toque!</p>
-            <div class="app-buttons">
-                <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="Download on the App Store"></a>
-                <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Get it on Google Play"></a>
+    <br>
+<!-- Hero section -->
+<div class="d-flex flex-column flex-grow-1 align-items-start text-white" style="padding-left: 10px;">
+    <img src="img/SPORT_SPACE_amarillo.png" alt="" width="1000px" style="align-items: center;">
+    <h1 class="display-3 text-white fw-bold">Reserva tu cancha al instante</h1>
+    <p class="lead">Explorá las canchas disponibles en tu ciudad y en tiempo real.</p>
+    <br><br><br>
+    <div class="d-flex justify-content-between mt-2 w-100"> <!-- Añadido mt-5 -->
+        <div class="input-group shadow-lg rounded-pill bg-white p-3" style="max-width: 900px;">
+            <!-- Ubicación -->
+            <span class="input-group-text border-0 bg-transparent text-muted" id="input-location">
+                <i class="fas fa-map-marker-alt"></i>
+            </span>
+            <input type="text" class="form-control border-0" placeholder="Cargando Ubicación..." aria-label="Ubicación" aria-describedby="input-location">
+
+            <!-- Deporte -->
+            <span class="input-group-text border-0 bg-transparent text-muted" id="input-sport">
+                <i class="fas fa-futbol"></i>
+            </span>
+            <input type="text" class="form-control border-0" placeholder="Elige deporte" aria-label="Deporte" aria-describedby="input-sport">
+
+            <!-- Fecha -->
+            <span class="input-group-text border-0 bg-transparent text-muted" id="input-date">
+                <i class="fas fa-calendar-alt"></i>
+            </span>
+            <input type="text" class="form-control border-0" placeholder="Mañana 22/10" aria-label="Fecha" aria-describedby="input-date">
+
+            <!-- Hora -->
+            <span class="input-group-text border-0 bg-transparent text-muted" id="input-time">
+                <i class="fas fa-clock"></i>
+            </span>
+            <input type="text" class="form-control border-0" placeholder="20:00hs" aria-label="Hora" aria-describedby="input-time">
+
+            <!-- Botón de búsqueda -->
+            <button class="btn btn-success rounded-pill" type="button">Buscar canchas</button>
+        </div>
+    </div>
+</div>
+<br><br><br><br><br><br>
+    <!-- América section -->
+    <div class="container my-5">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="text-success">Ponemos la tecnología al servicio del DEPORTE en nuestro País</h1>
+                <p>Estamos presentes en Santa Ana, El Salvador.</p>
+                <div class="d-flex justify-content-start gap-3 mb-3">
+                    <img src="img/ruta_a_bandera_salvador.pgn.png" alt="El Salvador" class="img-fluid" style="width: 60px;">
+                </div>
+                <a href="#" class="btn btn-outline-success">Quiero que llegue a mi departamento</a>
+            </div>
+            <div class="col-md-6">
+                <img src="img/gris.jpg" alt="Mapa" class="img-fluid">
             </div>
         </div>
-        <div class="hero-image">
-            <img src="img/1.png" alt="FairPlay App">
-        </div>
-    </main>
-    <section class="features">
-        <div class="features-image">
-            <img src="img/1.png" alt="FairPlay App Interface">
-        </div>
-        <div class="features-content">
-            <p class="subtitle">Juega y Disfruta!</p>
-            <h2>¡No demores en buscar y organizar el deporte que te apasiona!</h2>
-            <p>Somos una aplicación de reserva de espacios deportivos, totalmente amigable y fácil de usar, para que el deportista ahorre tiempo en su búsqueda y se enfoque solamente en divertirse y pasarla bien.</p>
-            <div class="feature">
-                <div class="feature-icon">📍</div>
-                <div>
-                    <h3>Busca el campo más cercano a tu ubicación.</h3>
-                    <p>Olvídate de las llamadas sin responder o chatear por whatsapp por horas. con Fairplay App podrás Encontrar tu cancha favorita más cercana a tu ubicación y reservarla en menos de 3 minutos.</p>
+    </div>
+
+    <!-- Misión y visión -->
+    <div class="bg-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="p-4 bg-white shadow rounded">
+                        <h2 class="text-success">Misión</h2>
+                        <p>
+                            Nuestra misión es ofrecer productos y servicios de alta calidad, promoviendo el crecimiento económico sostenible y generando valor a nuestros clientes, empleados y accionistas, a través de la innovación y el compromiso con la excelencia.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="p-4 bg-white shadow rounded">
+                        <h2 class="text-success">Visión</h2>
+                        <p>
+                            Nuestra visión es ser líderes en el mercado global, reconocidos por nuestro impacto positivo en la sociedad y el medio ambiente, manteniendo un enfoque en la innovación, la calidad y la responsabilidad social.
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="feature">
-                <div class="feature-icon">🏆</div>
-                <div>
-                    <h3>Beneficios exclusivos para deportistas exclusivos.</h3>
-                    <p>Reservar campos deportivos es el primer paso. Accede a varios beneficios en marcas de ropa deportiva para seguir viviendo tu pasión al límite.</p>
-                </div>
-            </div>
-            <button class="learn-more-btn">Saber Más</button>
         </div>
-    </section>
-    <section class="benefits">
-        <p class="subtitle">Te Brindamos</p>
-        <h2>Increibles Beneficios</h2>
-        <div class="benefits-grid">
-            <div class="benefit-card">
-                <div class="benefit-icon">✏️</div>
-                <h3 class="benefit-title">Registro Facil</h3>
-                <p class="benefit-description">Ingreso al aplicativo con un usuario de google o facebook.</p>
+    </div>
+
+    <!-- Descubre más servicios -->
+    <div class="bg-white py-5">
+        <div class="container d-flex flex-column flex-lg-row align-items-center justify-content-center gap-5">
+            <div class="col-lg-6">
+                <img src="img/canchasint.webp" alt="Servicios" class="img-fluid rounded">
             </div>
-            <div class="benefit-card">
-                <div class="benefit-icon">🛡️</div>
-                <h3 class="benefit-title">Seguridad al 100%</h3>
-                <p class="benefit-description">Tu información está a salvo con nosotros.</p>
-            </div>
-            <div class="benefit-card">
-                <div class="benefit-icon">👥</div>
-                <h3 class="benefit-title">Atención personalizada</h3>
-                <p class="benefit-description">Podrás contactarte con los dueños de canchas deportivas.</p>
-            </div>
-            <div class="benefit-card">
-                <div class="benefit-icon">🏀</div>
-                <h3 class="benefit-title">Variedad de deportes</h3>
-                <p class="benefit-description">Tenemos más de 5 categorías de deportes para ti.</p>
+            <div class="col-lg-6 text-center text-lg-start">
+                <h2><span class="text-success">Descubre</span> más servicios</h2>
+                <p>Aquí puedes encontrar más información sobre nuestros servicios, tarifas y beneficios. Aprovecha las mejores ofertas en alquiler de canchas y suscripciones.</p>
             </div>
         </div>
-    </section>
-    <a href="#" class="scroll-top">↑</a>
+    </div>
+<!-- Footer -->
+<footer class="bg-success text-white py-4">
+    <div class="container-fluid d-flex flex-column flex-lg-row justify-content-between align-items-center">
+        <div class="mb-3">
+            <img src="img/Logotipo_amarillo.png" alt="ATC Logo" class="img-fluid" style="width: 150px;">
+        </div>
+        <div class="mb-3">
+            <h3>Descubre SportSpace</h3>
+            <a href="#" class="text-white text-decoration-none">Políticas de privacidad</a>
+            <h3 class="mt-3">Redes sociales</h3>
+            <div class="d-flex gap-2">
+                <a href="#"><img src="img/instagram.png" alt="Instagram" width="30"></a>
+                <a href="https://www.facebook.com/Vozius27?locale=es_LA"><img src="img/facebook.png" alt="Facebook" width="30"></a>
+            </div>
+        </div>
+        <div class="mb-3">
+            <h3>Contacto directo</h3>
+            <a href="mailto:sportspace@gmail.com" class="text-white">sportspace@gmail.com</a>
+        </div>
+        <div class="text-end">
+            <h3>Descarga la app</h3>
+            <a href="#"><img src="img/googleplay.png" alt="Google Play" style="height: 90px;"></a>
+        </div>
+    </div>
+</footer>
+
+    <!-- Scripts de Bootstrap 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
