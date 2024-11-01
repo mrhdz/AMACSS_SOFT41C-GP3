@@ -1,6 +1,6 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Admin Panel</a>
+        <a class="navbar-brand" href="inicio.php">Administrador</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -18,6 +18,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="historialreservas.php">Historial de Reservas</a>
                 </li>
+                <form action="logout.php" method="POST">
+                    <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+                </form>
+
             </ul>
         </div>
+        
     </nav>
+
+
+

@@ -3,13 +3,20 @@ include '../../model/conexion.php'; // Asegúrate de que la ruta sea correcta
 
 session_start(); // Iniciar la sesión
 
+// Verificar el formulario enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
+    $conexion = new Conexion();
+    
     // Consultar el usuario en la base de datos
     $sql = "SELECT * FROM usuarios WHERE email = ?";
-    $stmt = $conexion->prepare($sql);
+    $stmt = $conexion->cn()->prepare($sql);
+    if (!$stmt) {
+        die("Error en la preparación de la declaración: " . $conexion->cn()->error);
+    }
+
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -19,14 +26,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Verificar la contraseña usando el nombre correcto de la columna
         if (password_verify($password, $usuario['PASSWORD'])) {
+            // Guardar el ID del usuario y otros datos en la sesión
+            $_SESSION['id_usuario'] = $usuario['id_usuario'];
             $_SESSION['usuario'] = $usuario['nombre'];
             $_SESSION['rol'] = $usuario['rol'];
-
+            
             // Redirigir según el rol
             if ($usuario['rol'] === 'admin') {
-                header("Location: admin/inicio.php"); // Cambia esta ruta según sea necesario
+                header("Location: admin/inicio.php");
             } else {
-                header("Location: user/inicioUs.php"); // Cambia esta ruta según sea necesario
+                header("Location: user/inicioUs.php");
             }
             exit();
         } else {
@@ -36,8 +45,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "El usuario no existe.";
     }
     $stmt->close();
+    $conexion->cn()->close();
 }
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -71,12 +84,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
             <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-            <div class="mt-3">
-                <a href="registro.php">¿No tienes una cuenta? Regístrate aquí</a>
-            </div>
-        </form>
+
+            
+
     </div>
 </div>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

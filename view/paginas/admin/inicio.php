@@ -1,3 +1,20 @@
+<?php
+session_start();
+
+// Verifica si el usuario ha iniciado sesión
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../../login.php"); // Redirige al login si no hay sesión
+    exit();
+}
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location: ../../login.php"); // Redirige al login si no hay sesión
+    exit();
+}
+
+$usuarioNombre = $_SESSION['usuario']; // Obtiene el nombre del usuario de la sesión
+$usuarioId = $_SESSION['id_usuario']; // Obtiene el id
+
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -20,7 +37,7 @@
             <!-- Bienvenida Administrador -->
             <div class="container text-center mt-5">
                 <div class="jumbotron">
-                    <h1 class="display-4">¡Bienvenido, Administrador!</h1>
+                    <h1 class="display-4">¡Bienvenido, <?php echo htmlspecialchars($usuarioNombre); ?>!</h1>
                     <p class="lead">Gracias por iniciar sesión en el Panel de Administración. Aquí puedes gestionar usuarios, canchas y reservas.</p>
                     <hr class="my-4">
                     <p>Utiliza el menú superior para acceder a las distintas secciones y administrar los recursos de manera eficiente.</p>
@@ -32,7 +49,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
-        
-

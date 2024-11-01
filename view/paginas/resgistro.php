@@ -1,5 +1,8 @@
 <?php
-include '../../model/conexion.php'; // Dos puntos hacia arriba para salir de la carpeta 'paginas' y entrar a 'model'
+include '../../model/conexion.php'; // Asegúrate de que la ruta sea correcta
+
+// Crear una instancia de la conexión
+$conexion = new conexion(); // Aquí se crea la instancia correctamente
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = $_POST['nombre'];
@@ -8,18 +11,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
     $rol = $_POST['rol'];
 
-    // Insertar datos en la base de datos
-    $sql = "INSERT INTO usuarios (nombre, email, telefono, password, rol) VALUES (?, ?, ?, ?, ?)";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("sssss", $nombre, $email, $telefono, $password, $rol);
+    // Verificar si el correo ya existe en la base de datos
+    $sqlCheck = "SELECT email FROM usuarios WHERE email = ?";
+    $stmtCheck = $conexion->cn()->prepare($sqlCheck);
+    if ($stmtCheck) {
+        $stmtCheck->bind_param("s", $email);
+        $stmtCheck->execute();
+        $stmtCheck->store_result();
 
-    if ($stmt->execute()) {
-        echo "<div class='alert alert-success'>Registro exitoso</div>";
-        header("Location:login.php"); // Cambia esta ruta según sea necesario
+        if ($stmtCheck->num_rows > 0) {
+            echo "<div class='alert alert-warning'>El correo electrónico ya está registrado. Por favor, intenta con uno diferente.</div>";
+        } else {
+            // Insertar los datos si el correo no existe
+            $sql = "INSERT INTO usuarios (nombre, email, telefono, password, rol) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $conexion->cn()->prepare($sql);
+            if ($stmt) {
+                $stmt->bind_param("sssss", $nombre, $email, $telefono, $password, $rol);
+                if ($stmt->execute()) {
+                    echo "<div class='alert alert-success'>Registro exitoso</div>";
+                    header("Location: login.php");
+                    exit();
+                } else {
+                    echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
+                }
+                $stmt->close();
+            } else {
+                echo "<div class='alert alert-danger'>Error al preparar la consulta: " . $conexion->cn()->error . "</div>";
+            }
+        }
+        $stmtCheck->close();
     } else {
-        echo "<div class='alert alert-danger'>Error: " . $stmt->error . "</div>";
+        echo "<div class='alert alert-danger'>Error al preparar la consulta de verificación: " . $conexion->cn()->error . "</div>";
     }
-    $stmt->close();
 }
 ?>
 
