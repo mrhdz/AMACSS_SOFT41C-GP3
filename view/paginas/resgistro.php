@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $rol = $_POST['rol'];
 
     // Insertar datos en la base de datos
-    $sql = "INSERT INTO Usuarios (nombre, email, telefono, password, rol) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO usuarios (nombre, email, telefono, password, rol) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("sssss", $nombre, $email, $telefono, $password, $rol);
 

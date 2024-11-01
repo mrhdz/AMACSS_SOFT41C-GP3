@@ -1,7 +1,6 @@
 <?php
 include '../../model/conexion.php'; // Asegúrate de que la ruta sea correcta
 
-
 session_start(); // Iniciar la sesión
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -9,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Consultar el usuario en la base de datos
-    $sql = "SELECT * FROM Usuarios WHERE email = ?";
+    $sql = "SELECT * FROM usuarios WHERE email = ?";
     $stmt = $conexion->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -17,17 +16,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows > 0) {
         $usuario = $result->fetch_assoc();
-        
-        // Verificar la contraseña
-        if (password_verify($password, $usuario['password'])) {
+
+        // Verificar la contraseña usando el nombre correcto de la columna
+        if (password_verify($password, $usuario['PASSWORD'])) {
             $_SESSION['usuario'] = $usuario['nombre'];
             $_SESSION['rol'] = $usuario['rol'];
 
             // Redirigir según el rol
             if ($usuario['rol'] === 'admin') {
-                header("Location:admin/inicio.php"); // Cambia esta ruta según sea necesario
+                header("Location: admin/inicio.php"); // Cambia esta ruta según sea necesario
             } else {
-                header("Location:user/inicioUs.php"); // Cambia esta ruta según sea necesario
+                header("Location: user/inicioUs.php"); // Cambia esta ruta según sea necesario
             }
             exit();
         } else {
@@ -73,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
             <div class="mt-3">
-                <a href="resgistro.php">¿No tienes una cuenta? Regístrate aquí</a>
+                <a href="registro.php">¿No tienes una cuenta? Regístrate aquí</a>
             </div>
         </form>
     </div>
