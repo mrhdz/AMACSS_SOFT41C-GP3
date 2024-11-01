@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport Space - Reserva tu cancha al instante</title>
+    <link rel="icon" href="view/paginas/img/logo blanco.png" type="image/x-icon">
+    <link rel="stylesheet" href="view/paginas/estilos">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Background image -->
+<div class="position-absolute top-0 start-0 w-100 h-100">
+    <img src="view/paginas/img/background.jpg" class="img-fluid w-100 h-100" style="object-fit: cover;">
+</div>
+
+<!-- Container principal -->
+<div class="container position-relative z-1 min-vh-100 d-flex flex-column">
+    <!-- Header -->
+    <header class="d-flex justify-content-between align-items-center py-3">
+        <a href="index.html">
+            <img src="view/paginas/img/logo amarillo.png" alt="ATC Logo" class="img-fluid" style="width: 90px;">
+        </a>
+        <div>
+            <a href="view\paginas\login.php" class="btn btn-light text-success fw-bold">Iniciar sesión</a>
+            <a href="view\paginas\resgistro.php" class="btn btn-secondary fw-bold">Registrarse</a>
+        </div>
+    </header>
+    <br>
+<!-- Hero section -->
+<div class="d-flex flex-column flex-grow-1 align-items-start text-white" style="padding-left: 10px;">
+    <img src="view/paginas/img/SPORT_SPACE_amarillo.png" alt="" width="1000px" style="align-items: center;">
+    <h1 class="display-3 text-white fw-bold">Reserva tu cancha al instante</h1>
+    <p class="lead">Explorá las canchas disponibles en tu ciudad y en tiempo real.</p>
+    <br><br><br>
+    <div class="d-flex justify-content-between mt-2 w-100"> <!-- Añadido mt-5 -->
+        <div class="input-group shadow-lg rounded-pill bg-white p-3" style="max-width: 900px;">
+            <!-- Ubicación -->
+            <span class="input-group-text border-0 bg-transparent text-muted" id="input-location">
+                <i class="fas fa-map-marker-alt"></i>
+            </span>
+            <input type="text" class="form-control border-0" placeholder="Cargando Ubicación..." aria-label="Ubicación" aria-describedby="input-location">
+
+            <!-- Deporte -->
+            <span class="input-group-text border-0 bg-transparent text-muted" id="input-sport">
+                <i class="fas fa-futbol"></i>
+            </span>
+            <input type="text" class="form-control border-0" placeholder="Elige deporte" aria-label="Deporte" aria-describedby="input-sport">
+
+            <!-- Fecha -->
+            <span class="input-group-text border-0 bg-transparent text-muted" id="input-date">
+                <i class="fas fa-calendar-alt"></i>
+            </span>
+            <input type="text" class="form-control border-0" placeholder="Mañana 22/10" aria-label="Fecha" aria-describedby="input-date">
+
+            <!-- Hora -->
+            <span class="input-group-text border-0 bg-transparent text-muted" id="input-time">
+                <i class="fas fa-clock"></i>
+            </span>
+            <input type="text" class="form-control border-0" placeholder="20:00hs" aria-label="Hora" aria-describedby="input-time">
+
+            <!-- Botón de búsqueda -->
+            <button class="btn btn-success rounded-pill" type="button">Buscar canchas</button>
+        </div>
+    </div>
+</div>
+<br><br><br><br><br><br>
+    <!-- América section -->
+    <div class="container my-5">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="text-success">Ponemos la tecnología al servicio del DEPORTE en nuestro País</h1>
+                <p>Estamos presentes en Santa Ana, El Salvador.</p>
+                <div class="d-flex justify-content-start gap-3 mb-3">
+                    <img src="view/paginas/img/ruta_a_bandera_salvador.pgn.png" alt="El Salvador" class="img-fluid" style="width: 60px;">
+                </div>
+                <a href="#" class="btn btn-outline-success">Quiero que llegue a mi departamento</a>
+            </div>
+            <div class="col-md-6">
+                <img src="view/paginas/img/gris.jpg" alt="Mapa" class="img-fluid">
+            </div>
+        </div>
+    </div>
+
+    <!-- Misión y visión -->
+    <div class="bg-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="p-4 bg-white shadow rounded">
+                        <h2 class="text-success">Misión</h2>
+                        <p>
+                            Nuestra misión es ofrecer productos y servicios de alta calidad, promoviendo el crecimiento económico sostenible y generando valor a nuestros clientes, empleados y accionistas, a través de la innovación y el compromiso con la excelencia.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="p-4 bg-white shadow rounded">
+                        <h2 class="text-success">Visión</h2>
+                        <p>
+                            Nuestra visión es ser líderes en el mercado global, reconocidos por nuestro impacto positivo en la sociedad y el medio ambiente, manteniendo un enfoque en la innovación, la calidad y la responsabilidad social.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Descubre más servicios -->
+    <div class="bg-white py-5">
+        <div class="container d-flex flex-column flex-lg-row align-items-center justify-content-center gap-5">
+            <div class="col-lg-6">
+                <img src="view/paginas/img/canchasint.webp" alt="Servicios" class="img-fluid rounded">
+            </div>
+            <div class="col-lg-6 text-center text-lg-start">
+                <h2><span class="text-success">Descubre</span> más servicios</h2>
+                <p>Aquí puedes encontrar más información sobre nuestros servicios, tarifas y beneficios. Aprovecha las mejores ofertas en alquiler de canchas y suscripciones.</p>
+            </div>
+        </div>
+    </div>
+<!-- Footer -->
+<footer class="bg-success text-white ">
+    <div class="container-fluid d-flex flex-column flex-lg-row justify-content-between align-items-center">
+        <div class="mb-3">
+            <img src="view/paginas/img/Logotipo_amarillo.png" alt="ATC Logo" class="img-fluid" style="width: 150px;">
+        </div>
+        <div class="mb-3">
+            <h3>Descubre SportSpace</h3>
+            <a href="#" class="text-white text-decoration-none">Políticas de privacidad</a>
+            <h3 class="mt-3">Redes sociales</h3>
+            <div class="d-flex gap-2">
+                <a href="#"><img src="view/paginas/img/instagram.png" alt="Instagram" width="30"></a>
+                <a href="https://www.facebook.com/Vozius27?locale=es_LA"><img src="view/paginas/img/facebook.png" alt="Facebook" width="30"></a>
+            </div>
+        </div>
+        <div class="mb-3">
+            <h3>Contacto directo</h3>
+            <a href="mailto:sportspace@gmail.com" class="text-white">sportspace@gmail.com</a>
+        </div>
+        <div class="text-end">
+            <h3 class="text-center">Descarga la app</h3>
+            <a href="#"><img src="view/paginas/img/googleplay.png" alt="Google Play" style="height: 90px;"></a>
+        </div>
+    </div>
+</footer>
+
+    <!-- Scripts de Bootstrap 5 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
