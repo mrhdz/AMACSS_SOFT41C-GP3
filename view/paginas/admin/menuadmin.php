@@ -7,16 +7,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#gestionUsuarios">Gestión de Usuarios</a>
+                    <a class="nav-link" href="gestionusuarios.php">Gestión de Usuarios</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="gestionCanchas.php">Gestión de Canchas</a>
+                    <a class="nav-link" href="gestioncanchas.php">Gestión de Canchas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#gestionReservas">Gestión de Reservas</a>
+                    <a class="nav-link" href="gestionreservas.php">Gestión de Reservas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#historialReservas">Historial de Reservas</a>
+                    <a class="nav-link" href="historialreservas.php">Historial de Reservas</a>
                 </li>
             </ul>
         </div>

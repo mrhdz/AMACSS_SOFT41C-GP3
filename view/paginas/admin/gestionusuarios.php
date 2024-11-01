@@ -1,4 +1,10 @@
     <!-- Secciones de administración -->
+    <header>
+         <!-- place navbar here -->
+        <?php 
+            require_once("menuadmin.php");
+        ?>
+    </header>
     <div class="container mt-4">
         <section id="gestionUsuarios">
             <h2>Gestión de Usuarios</h2>
