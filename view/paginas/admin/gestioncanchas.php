@@ -15,21 +15,46 @@ include($_SERVER['DOCUMENT_ROOT'] . '/AMACSS_SOFT41C-GP3/controller/canchaContro
 include($_SERVER['DOCUMENT_ROOT'] . '/AMACSS_SOFT41C-GP3/model/cancha.php');
 $canchaController = new CanchaController();
 
-$cancha =new Cancha();
-if (isset($_POST['ok1'])) {
+// Verifica si se envió el formulario
+if (isset($_POST['enviar'])) {
     $cancha = new Cancha();
-    $cancha->setIdCancha($_POST["id_cancha"]);
-    $cancha->setIdPropietario($_POST["id_usuario"]);
+    $cancha->setIdPropietario($usuarioId); // Asigna el ID del propietario desde la sesión
     $cancha->setNombre($_POST["nombre"]);
     $cancha->setTipo($_POST["tipo"]);
     $cancha->setCapacidad($_POST["capacidad"]);
     $cancha->setDescripcion($_POST["descripcion"]);
     $cancha->setPrecio($_POST["precio"]);
-    $cancha->setUrl($_POST["url"]);
+    $cancha->setUrlImagen($_POST["urlImagen"]);
     $cancha->setDisponibilidad($_POST["disponibilidad"]);
 
-    $canchaController = new CanchaController();
+    // Llama al método agregar del controlador
     $canchaController->agregar($cancha);
+
+    // Redirige para evitar reenvío del formulario
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
+}// Verifica si se envió el formulario de eliminación
+else if (isset($_POST['deleteBtn'])) {
+    $idCancha = $_POST['idCancha'];
+    $canchaController->eliminar($idCancha); // Llama al método para eliminar la cancha
+    header("Location: " . $_SERVER['PHP_SELF']); // Redirige para evitar reenvío de formulario
+    exit();
+}
+else if (isset($_POST['editBtn'])) {
+    $idCancha = $_POST['idCancha']; // Captura el ID de la cancha
+    $cancha = new Cancha();
+    $cancha->setIdCancha($idCancha);
+    $cancha->setNombre($_POST["nombre"]);
+    $cancha->setTipo($_POST["tipo"]);
+    $cancha->setCapacidad($_POST["capacidad"]);
+    $cancha->setDescripcion($_POST["descripcion"]);
+    $cancha->setPrecio($_POST["precio"]);
+    $cancha->setUrlImagen($_POST["urlImagen"]);
+    $cancha->setDisponibilidad($_POST["disponibilidad"]);
+
+    $canchaController->actualizar($cancha); // Llama al método para actualizar la cancha
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit();
 }
 
 ?>
@@ -94,8 +119,8 @@ if (isset($_POST['ok1'])) {
                                 <input type="number" step="0.01" class="form-control" id="precio" name="precio">
                             </div>
                             <div class="form-group">
-                                <label for="url">URL de Imagen</label>
-                                <input type="url" class="form-control" id="url" name="url">
+                                <label for="urlImagen">URL de la imagen</label>
+                                <input type="text" class="form-control" id="urlImagen" name="urlImagen" placeholder="https://ejemplo.com/imagen.jpg" required>
                             </div>
                             <div class="form-group">
                                 <label for="disponibilidad">Disponibilidad</label>
@@ -111,7 +136,7 @@ if (isset($_POST['ok1'])) {
                     <!-- Tabla para mostrar canchas registradas -->
                     <div class="col-md-7">
                         <h3>Canchas Registradas</h3>
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-bordered table-hover" id="mi tabla">
                             <thead class="thead-dark">
                                 <tr>
                                     <th>ID</th>
@@ -122,12 +147,12 @@ if (isset($_POST['ok1'])) {
                                     <th>Precio</th>
                                     <th>Imagen</th>
                                     <th>Disponibilidad</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody >
                                 <?php
                                 // Aquí agregarías el código PHP para obtener y mostrar las canchas de la base de datos.
-                 
                                 foreach ($canchaController->listar($usuarioId) as $cancha) {
                                     echo "<tr>
                                             <td>{$cancha->getIdCancha()}</td>
@@ -136,12 +161,27 @@ if (isset($_POST['ok1'])) {
                                             <td>{$cancha->getCapacidad()}</td>
                                             <td>{$cancha->getDescripcion()}</td>
                                             <td>{$cancha->getPrecio()}</td>
-                                            <td><img src='{$cancha->getUrl()}' alt='Imagen del destino' style='width: 100px;' /></td>
+                                            <td><img src='{$cancha->getUrlImagen()}' alt='Imagen del destino' style='width: 100px;' /></td>
                                             <td>{$cancha->getDisponibilidad()}</td>
-                                          </tr>";                                
-                                    
-                                }
-                                
+                                            <td>
+                                            <a href='javascript:void(0);' onclick='abrirModalEditar({
+                                                id: \"{$cancha->getIdCancha()}\",
+                                                nombre: \"{$cancha->getNombre()}\",
+                                                tipo: \"{$cancha->getTipo()}\",
+                                                capacidad: \"{$cancha->getCapacidad()}\",
+                                                descripcion: \"{$cancha->getDescripcion()}\",
+                                                precio: \"{$cancha->getPrecio()}\",
+                                                urlImagen: \"{$cancha->getUrlImagen()}\",
+                                                disponibilidad: \"{$cancha->getDisponibilidad()}\"
+                                            })' class='btn btn-warning btn-sm'>Editar</a>
+                                            
+                                                <form class='d-inline' method='post' action=''>
+                                                    <input type='hidden' name='idCancha' value='{$cancha->getIdCancha()}'>
+                                                    <button type='submit' name='deleteBtn' class='btn btn-danger  btn-sm'>Eliminar</button>
+                                                </form>
+                                            </td>
+                                        </tr>";                                   
+                                    }
                                 ?>
                             </tbody>
                         </table>
@@ -150,6 +190,68 @@ if (isset($_POST['ok1'])) {
             </div>
         </section>
     </main>
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Modificar Información de la Cancha</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="">
+                    <input type="hidden" name="idCancha" id="editIdCancha">
+                    <div class="mb-3">
+                        <label for="editNombre" class="form-label">Nombre de la Cancha</label>
+                        <input type="text" name="nombre" class="form-control" id="editNombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editTipo" class="form-label">Tipo de Cancha</label>
+                        <input type="text" name="tipo" class="form-control" id="editTipo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCapacidad" class="form-label">Capacidad</label>
+                        <input type="number" name="capacidad" class="form-control" id="editCapacidad" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDescripcion" class="form-label">Descripción</label>
+                        <textarea name="descripcion" class="form-control" id="editDescripcion" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editPrecio" class="form-label">Precio</label>
+                        <input type="number" step="0.01" name="precio" class="form-control" id="editPrecio">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editUrlImagen" class="form-label">URL de la imagen</label>
+                        <input type="text" name="urlImagen" class="form-control" id="editUrlImagen" placeholder="https://ejemplo.com/imagen.jpg">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editDisponibilidad" class="form-label">Disponibilidad</label>
+                        <select name="disponibilidad" class="form-control" id="editDisponibilidad">
+                            <option value="disponible">Disponible</option>
+                            <option value="reservada">Reservada</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" name='editBtn'>
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+        function abrirModalEditar(cancha) {
+        document.getElementById('editIdCancha').value = cancha.id;
+        document.getElementById('editNombre').value = cancha.nombre;
+        document.getElementById('editTipo').value = cancha.tipo;
+        document.getElementById('editCapacidad').value = cancha.capacidad;
+        document.getElementById('editDescripcion').value = cancha.descripcion;
+        document.getElementById('editPrecio').value = cancha.precio;
+        document.getElementById('editUrlImagen').value = cancha.urlImagen;
+        document.getElementById('editDisponibilidad').value = cancha.disponibilidad;
+        $('#editModal').modal('show');
+    }
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

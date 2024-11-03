@@ -1,4 +1,5 @@
 <?php
+
 // Eliminar todas las variables de sesión
 $_SESSION = [];
 
@@ -15,6 +16,6 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 // Redirigir a la página de inicio o a otra página
-header("Location: index.php"); // Cambia esta ruta a donde quieras redirigir
+header("Location: http://localhost/AMACSS_SOFT41C-GP3/index.php"); // Cambia esta ruta a donde quieras redirigir
 exit();
 ?>

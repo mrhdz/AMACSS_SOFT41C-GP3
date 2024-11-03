@@ -7,10 +7,10 @@ class Cancha {
     private $capacidad;
     private $descripcion;
     private $precio;
-    private $url;
+    private $urlImagen;
     private $disponibilidad;
     
-    public function __construct($id = "", $propietario = "", $nombre = "", $tipo = "", $capacidad = 0, $descripcion = "", $precio = 0.0, $url = "", $disponibilidad = "disponible") {
+    public function __construct($id = "", $propietario = "", $nombre = "", $tipo = "", $capacidad = 0, $descripcion = "", $precio = 0.0, $urlImagen = "", $disponibilidad = "disponible") {
         $this->id_cancha = $id;
         $this->id_propietario = $propietario;
         $this->nombre = $nombre;
@@ -18,7 +18,7 @@ class Cancha {
         $this->capacidad = $capacidad;
         $this->descripcion = $descripcion;
         $this->precio = $precio;
-        $this->url = $url;
+        $this->urlImagen = $urlImagen;
         $this->disponibilidad = $disponibilidad;
     }
 
@@ -50,8 +50,8 @@ class Cancha {
         return $this->precio;
     }
 
-    public function getUrl() {
-        return $this->url;
+    public function getUrlImagen() {
+        return $this->urlImagen;
     }
 
     public function getDisponibilidad() {
@@ -86,8 +86,8 @@ class Cancha {
         $this->precio = $precio;
     }
 
-    public function setUrl($url) {
-        $this->url = $url;
+    public function setUrlImagen($urlImagen) {
+        $this->urlImagen = $urlImagen;
     }
 
     public function setDisponibilidad($disponibilidad) {
