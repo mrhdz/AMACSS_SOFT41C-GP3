@@ -8,10 +8,37 @@ if (!isset($_SESSION['usuario'])) {
 $usuarioId = $_SESSION['id_usuario']; // Obtiene el ID del usuario desde la sesión
 $usuarioNombre = $_SESSION['usuario']; // Obtiene el nombre del usuario de la sesión
 
-include($_SERVER['DOCUMENT_ROOT'] . '/AMACSS_SOFT41C-GP3/controller/canchaController.php');
-include($_SERVER['DOCUMENT_ROOT'] . '/AMACSS_SOFT41C-GP3/model/cancha.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/AMACSS_SOFT41C-GP3/controller/canchaController.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/AMACSS_SOFT41C-GP3/model/reserva.php');
+require_once($_SERVER['DOCUMENT_ROOT'] . '/AMACSS_SOFT41C-GP3/controller/reservaController.php');
+
+
 $canchaController = new CanchaController();
 $canchasDisponibles = $canchaController->listarDisponibles();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $idCancha = $_POST['id_cancha'];
+    $idUsuario = $_POST['id_usuario'];
+    $fecha = $_POST['fecha'];
+    $duracion = $_POST['duracion'];
+    $estado = $_POST['estado'];
+
+    $reserva = new Reserva();
+    $reserva->setIdCancha($idCancha);
+    $reserva->setIdUsuario($idUsuario);
+    $reserva->setFechaReserva($fecha);
+    $reserva->setDuracion($duracion);
+    $reserva->setEstado($estado);
+
+    $reservaController = new ReservaController();
+    if ($reservaController->crearReserva($reserva)) {
+        header("Location:?success=true");
+    } else {
+        header("Location: 
+        ?success=false");
+    }
+    exit();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -132,12 +159,10 @@ $canchasDisponibles = $canchaController->listarDisponibles();
                                     <p class='card-text'>Descripción: " . htmlspecialchars($cancha["descripcion"]) . "</p>
                                     <p class='price'>$" . htmlspecialchars($cancha["precio"]) . " por hora</p>
                                     <p class='card-text'>Disponibilidad: " . htmlspecialchars($cancha["disponibilidad"]) . "</p>
-                                    <form action='procesar_reserva.php' method='post'>
-                                        <button type='button' class='button'>
-                                        <span class='button__text'>Alquilar</span>
-                                        <span class='button__icon'><svg xmlns='http://www.w3.org/2000/svg' width='24' viewBox='0 0 24 24' stroke-width='2' stroke-linejoin='round' stroke-linecap='round' stroke='currentColor' height='24' fill='none' class='svg'><line y2='19' y1='5' x2='12' x1='12'></line><line y2='12' y1='12' x2='19' x1='5'></line></svg></span>
-                                        </button>
-                                    </form>
+                                    <button type='submit' class='button' data-toggle='modal' data-target='#reservaModal' data-cancha-id='" . htmlspecialchars($cancha["id_cancha"]) . "'>
+                                    <span class='button__text' name='alquilar'>Alquilar</span>
+                                    <span class='button__icon' name='alquilar'><svg xmlns='http://www.w3.org/2000/svg' width='24' viewBox='0 0 24 24' stroke-width='2' stroke-linejoin='round' stroke-linecap='round' stroke='currentColor' height='24' fill='none' class='svg'><line y2='19' y1='5' x2='12' x1='12'></line><line y2='12' y1='12' x2='19' x1='5'></line></svg></span>
+                                    </button>
                                 </div>
                                 
                             </div>
@@ -149,6 +174,59 @@ $canchasDisponibles = $canchaController->listarDisponibles();
         </div>
     </main>
     
+    <!-- Modal para alquilar cancha -->
+    <div class="modal fade" id="reservaModal" tabindex="-1" role="dialog" aria-labelledby="reservaModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reservaModalLabel">Reservar Cancha</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post">
+                        <input type="hidden" name="id_cancha" id="id_cancha">
+                        <input type="hidden" name="id_usuario" value="<?php echo $usuarioId; ?>">
+                        
+                        <div class="form-group">
+                            <label for="fecha">Fecha de Reserva</label>
+                            <input type="datetime-local" class="form-control" name="fecha" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="duracion">Duración (horas)</label>
+                            <input type="number" class="form-control" name="duracion" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="estado">Estado</label>
+                            <select class="form-control" name="estado" required>
+                                <option value="confirmada">Confirmada</option>
+                                <option value="cancelada">Cancelada</option>
+                                <option value="modificada">Modificada</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-success">Confirmar Reserva</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        $('#reservaModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Botón que activó el modal
+            var canchaId = button.data('cancha-id'); // Extraer información del atributo data-*
+            var modal = $(this);
+            modal.find('.modal-body #id_cancha').val(canchaId); // Asignar el id de la cancha al campo oculto
+        });
+    </script>
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
