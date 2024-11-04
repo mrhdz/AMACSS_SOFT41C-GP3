@@ -59,8 +59,10 @@
             </span>
             <input type="text" class="form-control border-0" placeholder="20:00hs" aria-label="Hora" aria-describedby="input-time">
 
-            <!-- Botón de búsqueda -->
-            <button class="btn btn-success rounded-pill" type="button">Buscar canchas</button>
+            <form action="view/paginas/login.php">
+                <!-- Botón de búsqueda -->
+                <button class="btn btn-success rounded-pill" type="submit">Buscar canchas</button>
+            </form>
         </div>
     </div>
 </div>

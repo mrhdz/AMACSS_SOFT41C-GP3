@@ -105,7 +105,53 @@ class ReservaController extends conexion {
             return false;
         }
     }
+    class ReservaController extends conexion {
+    public function listarTodasLasReservas() {
+        $sql = "SELECT r.id_reserva, u.nombre AS usuario_nombre, c.nombre AS cancha_nombre, r.fecha_reserva, r.duracion, r.estado 
+                FROM reservas r 
+                JOIN usuarios u ON r.id_usuario = u.id_usuario 
+                JOIN canchas c ON r.id_cancha = c.id_cancha";
+        $result = $this->cn()->query($sql);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function actualizarReserva($idReserva, $fecha, $duracion, $estado) {
+        $sql = "UPDATE reservas SET fecha_reserva = ?, duracion = ?, estado = ? WHERE id_reserva = ?";
+        $stmt = $this->cn()->prepare($sql);
+        $stmt->bind_param("sisi", $fecha, $duracion, $estado, $idReserva);
+        return $stmt->execute();
+    }
+
+    public function eliminarReserva($idReserva) {
+        $sql = "DELETE FROM reservas WHERE id_reserva = ?";
+        $stmt = $this->cn()->prepare($sql);
+        $stmt->bind_param("i", $idReserva);
+        return $stmt->execute();
+    }
+        public function listarTodasLasReservas() {
+            $sql = "SELECT r.id_reserva, u.nombre AS usuario_nombre, c.nombre AS cancha_nombre, r.fecha_reserva, r.duracion, r.estado 
+                    FROM reservas r 
+                    JOIN usuarios u ON r.id_usuario = u.id_usuario 
+                    JOIN canchas c ON r.id_cancha = c.id_cancha";
+            $result = $this->cn()->query($sql);
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+    
+        public function actualizarReserva($idReserva, $fecha, $duracion, $estado) {
+            $sql = "UPDATE reservas SET fecha_reserva = ?, duracion = ?, estado = ? WHERE id_reserva = ?";
+            $stmt = $this->cn()->prepare($sql);
+            $stmt->bind_param("sisi", $fecha, $duracion, $estado, $idReserva);
+            return $stmt->execute();
+        }
+    
+        public function eliminarReserva($idReserva) {
+            $sql = "DELETE FROM reservas WHERE id_reserva = ?";
+            $stmt = $this->cn()->prepare($sql);
+            $stmt->bind_param("i", $idReserva);
+            return $stmt->execute();
+        }
     
     
 }
+
 ?>

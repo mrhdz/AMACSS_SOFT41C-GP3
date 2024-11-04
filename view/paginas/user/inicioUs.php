@@ -31,10 +31,13 @@ $usuarioId = $_SESSION['id_usuario']; // Obtiene el id
             require_once("menuUs.php");
         ?>
     </header>
-    <main>
-
-            <!-- Bienvenida Administrador -->
-            <div class="container text-center mt-5">
+    <!-- Background image -->
+    <div class="position-absolute top-0 start-0 w-100 h-100">
+            <img src="../img/background.jpg" class="img-fluid w-100 h-100" style="object-fit: cover;">
+        </div></div><br><br><br><br>
+        <main class="container my-5" style="margin-top: 80px;">
+        
+            <div class="container text-center mt-5 position-relative z-1 min-vh-100 d-flex flex-column">
                 <div class="jumbotron">
                     <h1 class="display-4">¡Bienvenido, <?php echo htmlspecialchars($usuarioNombre); ?>!</h1>
                     <p class="lead">Gracias por iniciar sesión</p>

@@ -89,7 +89,7 @@ else if (isset($_POST['editBtn'])) {
     <header>
         <?php require_once("menuadmin.php"); ?>
     </header>
-    <main>
+    <main class="container my-5" style="margin-top: 80px;">
         <br><center>    <h2><?php echo htmlspecialchars($usuarioNombre); ?>, Aquí puedes ver, editar o eliminar canchas.</h2>
         </center>
         <section id="gestionCanchas" class="mt-5">
