@@ -4,15 +4,17 @@ class ReservaController extends conexion {
 
     public function crearReserva($reserva) {
         // Consulta SQL para insertar una nueva reserva
-        $sql = "INSERT INTO reservas (id_cancha, id_usuario, fecha_reserva, duracion, estado) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO reservas (id_cancha, id_usuario, fecha_reserva, hora_inicio, hora_fin, duracion, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         // Preparar la sentencia
         if ($stmt = $this->cn()->prepare($sql)) {
             // Vincular parámetros
-            $stmt->bind_param("iisis", 
+            $stmt->bind_param("iisssis", 
                 $reserva->getIdCancha(), 
                 $reserva->getIdUsuario(), 
-                $reserva->getFechaReserva(), 
+                $reserva->getFechaReserva(),
+                $reserva->getHoraInicio(),
+                $reserva->getHoraFin(),    
                 $reserva->getDuracion(), 
                 $reserva->getEstado()
             );
@@ -33,10 +35,16 @@ class ReservaController extends conexion {
     }
     public function listarReservasPorUsuario($idUsuario) {
         // Consulta SQL para obtener las reservas del usuario
-        $sql = "SELECT r.id_reserva, r.id_cancha, r.fecha_reserva, r.duracion, r.estado, c.nombre AS cancha_nombre 
+        $sql = "SELECT r.id_reserva, r.id_cancha, r.fecha_reserva, r.duracion, r.hora_inicio, r.hora_fin, r.estado, 
+                c.nombre AS cancha_nombre, u.nombre AS propietario_nombre
                 FROM reservas r
                 INNER JOIN canchas c ON r.id_cancha = c.id_cancha
-                WHERE r.id_usuario = ?";
+                INNER JOIN usuarios u ON c.id_propietario = u.id_usuario
+                WHERE r.id_usuario = ?
+                ";
+                
+         
+                
 
         // Preparar la sentencia
         if ($stmt = $this->cn()->prepare($sql)) {
@@ -84,7 +92,7 @@ class ReservaController extends conexion {
     }
     public function actualizarReserva($idReserva, $fecha, $duracion, $estado) {
         // Consulta SQL para actualizar una reserva existente
-        $sql = "UPDATE reservas SET fecha_reserva = ?, duracion = ?, estado = ? WHERE id_reserva = ?";
+        $sql = "UPDATE reservas SET fecha_reserva = ?, duracion = ? WHERE id_reserva = ?";
         
         // Preparar la sentencia
         if ($stmt = $this->cn()->prepare($sql)) {
@@ -105,53 +113,28 @@ class ReservaController extends conexion {
             return false;
         }
     }
-    class ReservaController extends conexion {
-    public function listarTodasLasReservas() {
-        $sql = "SELECT r.id_reserva, u.nombre AS usuario_nombre, c.nombre AS cancha_nombre, r.fecha_reserva, r.duracion, r.estado 
+    public function listarReservasConfirmadas($idCancha) {
+        $sql = "SELECT * FROM reservas WHERE id_cancha = ? AND estado = 'confirmada'";
+        $stmt = $this->cn()->prepare($sql);
+        $stmt->bind_param("i", $idCancha);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+    public function listarSolicitudesPendientes() {
+        $sql = "SELECT r.*, c.nombre AS cancha_nombre, u.nombre AS usuario_nombre 
                 FROM reservas r 
+                JOIN canchas c ON r.id_cancha = c.id_cancha 
                 JOIN usuarios u ON r.id_usuario = u.id_usuario 
-                JOIN canchas c ON r.id_cancha = c.id_cancha";
-        $result = $this->cn()->query($sql);
-        return $result->fetch_all(MYSQLI_ASSOC);
+                WHERE r.estado = 'pendiente'";
+        return $this->cn()->query($sql)->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function actualizarReserva($idReserva, $fecha, $duracion, $estado) {
-        $sql = "UPDATE reservas SET fecha_reserva = ?, duracion = ?, estado = ? WHERE id_reserva = ?";
+    public function actualizarEstadoReserva($idReserva, $estado) {
+        $sql = "UPDATE reservas SET estado = ? WHERE id_reserva = ?";
         $stmt = $this->cn()->prepare($sql);
-        $stmt->bind_param("sisi", $fecha, $duracion, $estado, $idReserva);
+        $stmt->bind_param("si", $estado, $idReserva);
         return $stmt->execute();
     }
-
-    public function eliminarReserva($idReserva) {
-        $sql = "DELETE FROM reservas WHERE id_reserva = ?";
-        $stmt = $this->cn()->prepare($sql);
-        $stmt->bind_param("i", $idReserva);
-        return $stmt->execute();
-    }
-        public function listarTodasLasReservas() {
-            $sql = "SELECT r.id_reserva, u.nombre AS usuario_nombre, c.nombre AS cancha_nombre, r.fecha_reserva, r.duracion, r.estado 
-                    FROM reservas r 
-                    JOIN usuarios u ON r.id_usuario = u.id_usuario 
-                    JOIN canchas c ON r.id_cancha = c.id_cancha";
-            $result = $this->cn()->query($sql);
-            return $result->fetch_all(MYSQLI_ASSOC);
-        }
-    
-        public function actualizarReserva($idReserva, $fecha, $duracion, $estado) {
-            $sql = "UPDATE reservas SET fecha_reserva = ?, duracion = ?, estado = ? WHERE id_reserva = ?";
-            $stmt = $this->cn()->prepare($sql);
-            $stmt->bind_param("sisi", $fecha, $duracion, $estado, $idReserva);
-            return $stmt->execute();
-        }
-    
-        public function eliminarReserva($idReserva) {
-            $sql = "DELETE FROM reservas WHERE id_reserva = ?";
-            $stmt = $this->cn()->prepare($sql);
-            $stmt->bind_param("i", $idReserva);
-            return $stmt->execute();
-        }
-    
-    
 }
 
 ?>

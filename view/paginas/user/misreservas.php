@@ -28,12 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idReserva = $_POST['id_reserva'];
         $fecha = $_POST['fecha'];
         $duracion = $_POST['duracion'];
-        $estado = $_POST['estado'];
+        
 
         $reservaController->actualizarReserva($idReserva, $fecha, $duracion, $estado);
         header("Location: misReservas.php"); // Redirigir a la lista de reservas
         exit();
     }
+    
 }
 ?>
 
@@ -57,9 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th>Propietario</th>
                         <th>Cancha</th>
                         <th>Fecha de Reserva</th>
                         <th>Duración (horas)</th>
+                        <th>Hora inicio</th>
+                        <th>Hora fin</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
@@ -67,9 +71,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <tbody>
                     <?php foreach ($reservas as $reserva): ?>
                         <tr>
+                            <td><?php echo htmlspecialchars($reserva['propietario_nombre']); ?></td>
                             <td><?php echo htmlspecialchars($reserva['cancha_nombre']); ?></td>
                             <td><?php echo htmlspecialchars($reserva['fecha_reserva']); ?></td>
                             <td><?php echo htmlspecialchars($reserva['duracion']); ?> horas</td>
+                            <td><?php echo htmlspecialchars($reserva['hora_inicio']); ?></td>
+                            <td><?php echo htmlspecialchars($reserva['hora_fin']); ?></td>
                             <td><?php echo htmlspecialchars($reserva['estado']); ?></td>
                             <td>
                                 <!-- Botón de Editar que abre el modal -->
@@ -98,14 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         <label for="duracion">Duración (horas)</label>
                                                         <input type="number" class="form-control" name="duracion" value="<?php echo htmlspecialchars($reserva['duracion']); ?>" required>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="estado">Estado</label>
-                                                        <select class="form-control" name="estado" required>
-                                                            <option value="confirmada" <?php echo $reserva['estado'] == 'confirmada' ? 'selected' : ''; ?>>Confirmada</option>
-                                                            <option value="cancelada" <?php echo $reserva['estado'] == 'cancelada' ? 'selected' : ''; ?>>Cancelada</option>
-                                                            <option value="modificada" <?php echo $reserva['estado'] == 'modificada' ? 'selected' : ''; ?>>Modificada</option>
-                                                        </select>
-                                                    </div>
+                                                    
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                         <button type="submit" class="btn btn-success">Actualizar Reserva</button>
@@ -115,8 +115,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </div>
                                     </div>
                                 </div>
-
-
                                 <!-- Botón de Eliminar -->
                                 <form action="misReservas.php" method="post" style="display:inline;">
                                     <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">

@@ -25,7 +25,6 @@ if (isset($_POST['enviar'])) {
     $cancha->setDescripcion($_POST["descripcion"]);
     $cancha->setPrecio($_POST["precio"]);
     $cancha->setUrlImagen($_POST["urlImagen"]);
-    $cancha->setDisponibilidad($_POST["disponibilidad"]);
 
     // Llama al método agregar del controlador
     $canchaController->agregar($cancha);
@@ -50,7 +49,6 @@ else if (isset($_POST['editBtn'])) {
     $cancha->setDescripcion($_POST["descripcion"]);
     $cancha->setPrecio($_POST["precio"]);
     $cancha->setUrlImagen($_POST["urlImagen"]);
-    $cancha->setDisponibilidad($_POST["disponibilidad"]);
 
     $canchaController->actualizar($cancha); // Llama al método para actualizar la cancha
     header("Location: " . $_SERVER['PHP_SELF']);
@@ -122,13 +120,6 @@ else if (isset($_POST['editBtn'])) {
                                 <label for="urlImagen">URL de la imagen</label>
                                 <input type="text" class="form-control" id="urlImagen" name="urlImagen" placeholder="https://ejemplo.com/imagen.jpg" required>
                             </div>
-                            <div class="form-group">
-                                <label for="disponibilidad">Disponibilidad</label>
-                                <select class="form-control" id="disponibilidad" name="disponibilidad">
-                                    <option value="disponible">Disponible</option>
-                                    <option value="reservada">Reservada</option>
-                                </select>
-                            </div>
                             <button type="submit" class="btn btn-primary btn-block" name="enviar">Agregar Cancha</button>
                         </form>
                     </div>
@@ -146,7 +137,6 @@ else if (isset($_POST['editBtn'])) {
                                     <th>Descripción</th>
                                     <th>Precio</th>
                                     <th>Imagen</th>
-                                    <th>Disponibilidad</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -162,7 +152,6 @@ else if (isset($_POST['editBtn'])) {
                                             <td>{$cancha->getDescripcion()}</td>
                                             <td>{$cancha->getPrecio()}</td>
                                             <td><img src='{$cancha->getUrlImagen()}' alt='Imagen del destino' style='width: 100px;' /></td>
-                                            <td>{$cancha->getDisponibilidad()}</td>
                                             <td>
                                             <a href='javascript:void(0);' onclick='abrirModalEditar({
                                                 id: \"{$cancha->getIdCancha()}\",
@@ -171,8 +160,7 @@ else if (isset($_POST['editBtn'])) {
                                                 capacidad: \"{$cancha->getCapacidad()}\",
                                                 descripcion: \"{$cancha->getDescripcion()}\",
                                                 precio: \"{$cancha->getPrecio()}\",
-                                                urlImagen: \"{$cancha->getUrlImagen()}\",
-                                                disponibilidad: \"{$cancha->getDisponibilidad()}\"
+                                                urlImagen: \"{$cancha->getUrlImagen()}\"
                                             })' class='btn btn-warning btn-sm'>Editar</a>
                                             
                                                 <form class='d-inline' method='post' action=''>
@@ -224,13 +212,6 @@ else if (isset($_POST['editBtn'])) {
                         <label for="editUrlImagen" class="form-label">URL de la imagen</label>
                         <input type="text" name="urlImagen" class="form-control" id="editUrlImagen" placeholder="https://ejemplo.com/imagen.jpg">
                     </div>
-                    <div class="mb-3">
-                        <label for="editDisponibilidad" class="form-label">Disponibilidad</label>
-                        <select name="disponibilidad" class="form-control" id="editDisponibilidad">
-                            <option value="disponible">Disponible</option>
-                            <option value="reservada">Reservada</option>
-                        </select>
-                    </div>
                     <button type="submit" class="btn btn-primary" name='editBtn'>
                         <i class="fas fa-save"></i> Guardar Cambios
                     </button>
@@ -248,7 +229,6 @@ else if (isset($_POST['editBtn'])) {
         document.getElementById('editDescripcion').value = cancha.descripcion;
         document.getElementById('editPrecio').value = cancha.precio;
         document.getElementById('editUrlImagen').value = cancha.urlImagen;
-        document.getElementById('editDisponibilidad').value = cancha.disponibilidad;
         $('#editModal').modal('show');
     }
     </script>

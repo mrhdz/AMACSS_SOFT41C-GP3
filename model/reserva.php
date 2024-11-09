@@ -4,14 +4,18 @@ class Reserva {
     private $id_cancha;
     private $id_usuario;
     private $fecha_reserva;
+    private $horaInicio;
+    private $horaFin;
     private $duracion;
     private $estado;
     
-    public function __construct($id = "", $cancha = "", $usuario = "", $fecha = "", $duracion = 0, $estado = "confirmada") {
+    public function __construct($id = "", $cancha = "", $usuario = "", $fecha = "",$horaInicio="",$horaFin="", $duracion = 0, $estado = "confirmada") {
         $this->id_reserva = $id;
         $this->id_cancha = $cancha;
         $this->id_usuario = $usuario;
         $this->fecha_reserva = $fecha;
+        $this->horaInicio = $horaInicio;
+        $this->horaFin = $horaFin;
         $this->duracion = $duracion;
         $this->estado = $estado;
     }
@@ -30,6 +34,14 @@ class Reserva {
 
     public function getFechaReserva() {
         return $this->fecha_reserva;
+    }
+
+    public function getHoraInicio() {
+        return $this->horaInicio;
+    }
+
+    public function getHoraFin() {
+        return $this->horaFin;
     }
 
     public function getDuracion() {
@@ -55,6 +67,14 @@ class Reserva {
     public function setFechaReserva($fecha) {
         $this->fecha_reserva = $fecha;
     }
+    public function setHoraInicio($horaInicio) {
+        $this->horaInicio = $horaInicio;
+    }
+    
+    public function setHoraFin($horaFin) {
+        $this->horaFin = $horaFin;
+    }
+
 
     public function setDuracion($duracion) {
         $this->duracion = $duracion;
