@@ -35,116 +35,132 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($reservaController->crearReserva($reserva)) {
         header("Location:?success=true");
     } else {
-        header("Location: 
-        ?success=false");
+        header("Location: ?success=false");
     }
     exit();
-
-
-
 }
-if (isset($_GET['success'])) {
-    if ($_GET['success'] == 'true') {
-        echo "<div class='alert alert-success'>¡La solicitud de alquiler se ha enviado correctamente!</div>";
-    } else {
-        echo "<div class='alert alert-danger'>Hubo un error al enviar la solicitud de alquiler. Por favor, inténtalo de nuevo.</div>";
-    }
-}
-
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/admin.css">
+    <title>Canchas Disponibles - Sport Space</title>
+    <link rel="icon" href="/AMACSS_SOFT41C-GP3/view/paginas/img/Logo blanco.png" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #45a049;
+            --accent-color: #FFF176;
+            --background-color: #2E7D32;
+            --text-color: #ffffff;
+            --dark-text: #212121;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #e8f5e9;
+            color: var(--dark-text);
+        }
+
+        .navbar {
+            background-color: var(--background-color);
+        }
+
+        .hero-section {
+            background-image: url('https://images.unsplash.com/photo-1459865264687-595d652de67e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 30vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: var(--text-color);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
         .card {
             border: none;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
         .card img {
-            width: 100%;
-            height: auto;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
+            height: 200px;
+            object-fit: cover;
         }
+
         .card-body {
-            padding: 15px;
+            padding: 1.5rem;
         }
+
         .card-title {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: bold;
+            color: var(--primary-color);
         }
+
         .card-text {
             font-size: 0.9rem;
-            color: #666;
+            color: var(--dark-text);
         }
+
         .price {
-            font-size: 1rem;
+            font-size: 1.2rem;
             font-weight: bold;
-            color: #28a745;
-        }
-        .button {
-        position: relative;
-        width: 150px;
-        height: 40px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        border: 1px solid #34974d;
-        background-color: #3aa856;
+            color: var(--secondary-color);
         }
 
-        .button, .button__icon, .button__text {
-        transition: all 0.3s;
+        .btn-custom {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
 
-        .button .button__text {
-        transform: translateX(30px);
-        color: #fff;
-        font-weight: 600;
+        .btn-custom:hover {
+            background-color: var(--secondary-color);
+            transform: scale(1.05);
         }
 
-        .button .button__icon {
-        position: absolute;
-        transform: translateX(109px);
-        height: 100%;
-        width: 39px;
-        background-color: #34974d;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        .form-control {
+            border-radius: 20px;
         }
 
-        .button .svg {
-        width: 30px;
-        stroke: #fff;
-        }
-
-        .button:hover {
-        background: #34974d;
-        }
-
-        .button:hover .button__text {
-        color: transparent;
-        }
-
-        .button:hover .button__icon {
-        width: 148px;
-        transform: translateX(0);
-        }
-
-        .button:active .button__icon {
-        background-color: #2e8644;
-        }
-
-        .button:active {
-        border: 1px solid #2e8644;
+        .footer {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 20px 0;
+            margin-top: 3rem;
         }
     </style>
 </head>
@@ -152,67 +168,75 @@ if (isset($_GET['success'])) {
     <header>
         <?php require_once("menuUs.php"); ?>
     </header>
-    <main>
-        <br><center><h2><?php echo htmlspecialchars($usuarioNombre); ?>, Aquí puedes ver todas las canchas.</h2></center>
-        <div class="container my-5">
-            <h2 class="text-center mb-4">Lista de Canchas Disponibles</h2>
-            <div class="row">
-                <!-- Comienza el bucle de canchas -->
-                <?php
-foreach ($canchasDisponibles as $cancha) {
-    echo "<div class='col-md-4'>
-            <div class='card'>
-                <img src='" . htmlspecialchars($cancha["urlImagen"]) . "' alt='Imagen de la cancha'>
-                <div class='card-body'>
-                    <h5 class='card-title'>" . htmlspecialchars($cancha["nombre"]) . "</h5>
-                    <p class='card-text'>Propietario: " . htmlspecialchars($cancha["propietario_nombre"]) . "</p>
-                    <p class='card-text'>Tipo: " . htmlspecialchars($cancha["tipo"]) . "</p>
-                    <p class='card-text'>Capacidad: " . htmlspecialchars($cancha["capacidad"]) . " personas</p>
-                    <p class='card-text'>Descripción: " . htmlspecialchars($cancha["descripcion"]) . "</p>
-                    <p class='price'>$" . htmlspecialchars($cancha["precio"]) . " por hora</p>
-                    
-                    <!-- Formulario para alquilar la cancha -->
-                    <form action='solicitarAlquiler.php' method='POST'>
-                        <input type='hidden' name='id_cancha' value='" . htmlspecialchars($cancha["id_cancha"]) . "'>
-                        <input type='hidden' name='id_usuario' value='" . htmlspecialchars($usuarioId) . "'>
 
-                        <label for='fecha'>Fecha de reserva:</label>
-                        <input type='date' name='fecha' required>
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="display-4 fw-bold"><?php echo htmlspecialchars($usuarioNombre); ?>, Explora Nuestras Canchas</h1>
+            <p class="lead">Encuentra y reserva la cancha perfecta para tu próximo partido</p>
+        </div>
+    </section>
 
-                        <label for='hora_inicio'>Hora de inicio:</label>
-                        <input type='time' name='hora_inicio' required><br>
+    <main class="container my-5">
+        <?php
+        if (isset($_GET['success'])) {
+            if ($_GET['success'] == 'true') {
+                echo "<div class='alert alert-success'>¡La solicitud de alquiler se ha enviado correctamente!</div>";
+            } else {
+                echo "<div class='alert alert-danger'>Hubo un error al enviar la solicitud de alquiler. Por favor, inténtalo de nuevo.</div>";
+            }
+        }
+        ?>
 
-                        <label for='duracion'>Duración (horas):</label>
-                        <input type='number' name='duracion' min='1' max='5' required>
-
-                        <button type='submit' class='button'>
-                            <span class='button__text'>Alquilar</span>
-                            <span class='button__icon'>
-                                <svg xmlns='http://www.w3.org/2000/svg' width='24' viewBox='0 0 24 24' stroke-width='2' stroke-linejoin='round' stroke-linecap='round' stroke='currentColor' height='24' fill='none' class='svg'>
-                                    <line y2='19' y1='5' x2='12' x1='12'></line>
-                                    <line y2='12' y1='12' x2='19' x1='5'></line>
-                                </svg>
-                            </span>
-                        </button>
-                    </form>
-
+        <h2 class="text-center mb-4">Canchas Disponibles</h2>
+        <div class="row">
+            <?php foreach ($canchasDisponibles as $cancha): ?>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="<?php echo htmlspecialchars($cancha["urlImagen"]); ?>" class="card-img-top" alt="Imagen de la cancha">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title"><?php echo htmlspecialchars($cancha["nombre"]); ?></h5>
+                            <p class="card-text">Propietario: <?php echo htmlspecialchars($cancha["propietario_nombre"]); ?></p>
+                            <p class="card-text">Tipo: <?php echo htmlspecialchars($cancha["tipo"]); ?></p>
+                            <p class="card-text">Capacidad: <?php echo htmlspecialchars($cancha["capacidad"]); ?> personas</p>
+                            <p class="card-text"><?php echo htmlspecialchars($cancha["descripcion"]); ?></p>
+                            <p class="price mt-auto">$<?php echo htmlspecialchars($cancha["precio"]); ?> por hora</p>
+                            
+                            <form action="solicitarAlquiler.php" method="POST" class="mt-3">
+                                <input type="hidden" name="id_cancha" value="<?php echo htmlspecialchars($cancha["id_cancha"]); ?>">
+                                <input type="hidden" name="id_usuario" value="<?php echo htmlspecialchars($usuarioId); ?>">
+                                
+                                <div class="mb-3">
+                                    <label for="fecha" class="form-label">Fecha de reserva:</label>
+                                    <input type="date" name="fecha" class="form-control" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="hora_inicio" class="form-label">Hora de inicio:</label>
+                                    <input type="time" name="hora_inicio" class="form-control" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="duracion" class="form-label">Duración (horas):</label>
+                                    <input type="number" name="duracion" min="1" max="5" class="form-control" required>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-custom w-100">
+                                    <i class="bi bi-calendar-check me-2"></i>Reservar Ahora
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </div>
-          </div>";
-}
-?>
-
-                <!-- Fin del bucle de canchas -->
-            </div>
+            <?php endforeach; ?>
         </div>
     </main>
 
-    <!-- Bootstrap JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  
-    <!-- Bootstrap JavaScript Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <footer class="footer text-center">
+        <div class="container">
+            <p>&copy; 2023 Sport Space. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

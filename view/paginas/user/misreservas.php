@@ -1,41 +1,18 @@
 <?php
 session_start();
-
-// Verifica si el usuario ha iniciado sesión
 if (!isset($_SESSION['usuario'])) {
-    header("Location: ../../login.php"); // Redirige al login si no hay sesión
-    exit();
-}
-if (!isset($_SESSION['id_usuario'])) {
-    header("Location: ../../login.php"); // Redirige al login si no hay sesión
+    header("Location: login.php");
     exit();
 }
 
-$usuarioNombre = $_SESSION['usuario']; // Obtiene el nombre del usuario de la sesión
-$usuarioId = $_SESSION['id_usuario']; // Obtiene el id
+$usuarioNombre = $_SESSION['usuario'];
+$usuarioId = $_SESSION['id_usuario'];
+
 include($_SERVER['DOCUMENT_ROOT'] . '/AMACSS_SOFT41C-GP3/controller/reservaController.php');
 
 $reservaController = new ReservaController();
-$reservas = $reservaController->listarReservasPorUsuario($usuarioId);
+$reservas = $reservaController->listarReservasPorUsuario($usuarioId); // Obtener reservas del usuario
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['eliminar'])) {
-        $idReserva = $_POST['id_reserva'];
-        $reservaController->eliminarReserva($idReserva);
-        header("Location: misReservas.php");
-        exit();
-    } elseif (isset($_POST['id_reserva'])) {
-        $idReserva = $_POST['id_reserva'];
-        $fecha = $_POST['fecha'];
-        $duracion = $_POST['duracion'];
-        
-
-        $reservaController->actualizarReserva($idReserva, $fecha, $duracion, $estado);
-        header("Location: misReservas.php"); // Redirigir a la lista de reservas
-        exit();
-    }
-    
-}
 ?>
 
 <!DOCTYPE html>
@@ -43,93 +20,153 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis reservas</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Mis Reservas - Sport Space</title>
+    <link rel="icon" href="/AMACSS_SOFT41C-GP3/view/paginas/img/Logo blanco.png" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #45a049;
+            --accent-color: #FFF176;
+            --background-color: #2E7D32;
+            --text-color: #ffffff;
+            --dark-text: #212121;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #e8f5e9;
+            color: var(--dark-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: var(--background-color);
+        }
+
+        .hero-section {
+            background-image: url('https://images.unsplash.com/photo-1577223625816-7546f13df25d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 30vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: var(--text-color);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .table {
+            background-color: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .table thead {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+        }
+
+        .footer {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding: 20px 0;
+            margin-top: auto;
+        }
+
+        main {
+            flex: 1;
+        }
+    </style>
 </head>
 <body>
     <header>
         <?php require_once("menuUs.php"); ?>
     </header>
-    <br><center><h2><?php echo htmlspecialchars($usuarioNombre); ?>, Aquí puedes ver tus reservas.</h2></center>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="display-4 fw-bold">Mis Reservas</h1>
+            <p class="lead">Gestiona tus reservas de canchas deportivas</p>
+        </div>
+    </section>
+
     <main class="container my-5">
-        <h2 class="text-center">Mis Reservas</h2>
-
         <?php if ($reservas): ?>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Propietario</th>
-                        <th>Cancha</th>
-                        <th>Fecha de Reserva</th>
-                        <th>Duración (horas)</th>
-                        <th>Hora inicio</th>
-                        <th>Hora fin</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($reservas as $reserva): ?>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
                         <tr>
-                            <td><?php echo htmlspecialchars($reserva['propietario_nombre']); ?></td>
-                            <td><?php echo htmlspecialchars($reserva['cancha_nombre']); ?></td>
-                            <td><?php echo htmlspecialchars($reserva['fecha_reserva']); ?></td>
-                            <td><?php echo htmlspecialchars($reserva['duracion']); ?> horas</td>
-                            <td><?php echo htmlspecialchars($reserva['hora_inicio']); ?></td>
-                            <td><?php echo htmlspecialchars($reserva['hora_fin']); ?></td>
-                            <td><?php echo htmlspecialchars($reserva['estado']); ?></td>
-                            <td>
-                                <!-- Botón de Editar que abre el modal -->
-                                <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editarModal<?php echo $reserva['id_reserva']; ?>">
-                                    Editar
-                                </button>
-
-                                <!-- Modal para editar reserva -->
-                                <div class="modal fade" id="editarModal<?php echo $reserva['id_reserva']; ?>" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="editarModalLabel">Editar Reserva</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form action="" method="post">
-                                                    <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">
-                                                    <div class="form-group">
-                                                        <label for="fecha">Fecha de Reserva</label>
-                                                        <input type="datetime-local" class="form-control" name="fecha" value="<?php echo date('Y-m-d\TH:i', strtotime($reserva['fecha_reserva'])); ?>" required>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="duracion">Duración (horas)</label>
-                                                        <input type="number" class="form-control" name="duracion" value="<?php echo htmlspecialchars($reserva['duracion']); ?>" required>
-                                                    </div>
-                                                    
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                                        <button type="submit" class="btn btn-success">Actualizar Reserva</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Botón de Eliminar -->
-                                <form action="misReservas.php" method="post" style="display:inline;">
-                                    <input type="hidden" name="id_reserva" value="<?php echo $reserva['id_reserva']; ?>">
-                                    <button type="submit" name="eliminar" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar esta reserva?');">Eliminar</button>
-                                </form>
-                            </td>
+                            <th>Cancha</th>
+                            <th>Fecha</th>
+                            <th>Hora Inicio</th>
+                            <th>Hora Fin</th>
+                            <th>Estado</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($reservas as $reserva): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($reserva['cancha_nombre']); ?></td>
+                                <td><?php echo htmlspecialchars($reserva['fecha_reserva']); ?></td>
+                                <td><?php echo htmlspecialchars($reserva['hora_inicio']); ?></td>
+                                <td><?php echo htmlspecialchars($reserva['hora_fin']); ?></td>
+                                <td>
+                                    <?php
+                                    $estado = htmlspecialchars($reserva['estado']);
+                                    $badgeClass = 'bg-secondary';
+                                    switch ($estado) {
+                                        case 'Confirmada':
+                                            $badgeClass = 'bg-success';
+                                            break;
+                                        case 'Pendiente':
+                                            $badgeClass = 'bg-warning text-dark';
+                                            break;
+                                        case 'Cancelada':
+                                            $badgeClass = 'bg-danger';
+                                            break;
+                                    }
+                                    echo "<span class='badge $badgeClass'>$estado</span>";
+                                    ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php else: ?>
-            <p class="text-center">No tienes reservas en este momento.</p>
+            <div class="alert alert-info text-center" role="alert">
+                <i class="bi bi-info-circle-fill me-2"></i>No tienes reservas en este momento.
+            </div>
         <?php endif; ?>
     </main>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <footer class="footer text-center">
+        <div class="container">
+            <p>&copy; 2023 Sport Space. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

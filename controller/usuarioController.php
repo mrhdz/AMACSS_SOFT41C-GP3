@@ -1,8 +1,8 @@
 <?php
-include_once 'usuario.php';
+include_once 'reserva.php';
 include '../../model/conexion.php';
 
-class UsuarioController {
+class ReservaController {
 
     private $conexion;
 
@@ -10,32 +10,83 @@ class UsuarioController {
         $this->conexion = $conexion;
     }
 
-    public function crearUsuario($usuario) {
-        $sql = "INSERT INTO usuarios (nombre, email, telefono, password, rol) VALUES (?, ?, ?, ?, ?)";
+    public function crearReserva($reserva) {
+        $sql = "INSERT INTO reservas (id_cancha, id_usuario, fecha_reserva, hora_inicio, hora_fin, duracion, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->conexion->prepare($sql);
-        $stmt->bind_param("sssss", $usuario->getNombre(), $usuario->getEmail(), $usuario->getTelefono(), $usuario->getPassword(), $usuario->getRol());
+        $stmt->bind_param("iisssis", $reserva->getIdCancha(), $reserva->getIdUsuario(), $reserva->getFechaReserva(), $reserva->getHoraInicio(), $reserva->getHoraFin(), $reserva->getDuracion(), $reserva->getEstado());
         return $stmt->execute();
     }
 
-    public function obtenerUsuarioPorId($id) {
-        $sql = "SELECT * FROM usuarios WHERE id_usuario = ?";
+    public function obtenerReservaPorId($id) {
+        $sql = "SELECT * FROM reservas WHERE id_reserva = ?";
         $stmt = $this->conexion->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }
 
-    public function actualizarUsuario($usuario) {
-        $sql = "UPDATE usuarios SET nombre = ?, email = ?, telefono = ?, password = ?, rol = ? WHERE id_usuario = ?";
+    public function actualizarReserva($reserva) {
+        $sql = "UPDATE reservas SET id_cancha = ?, id_usuario = ?, fecha_reserva = ?, hora_inicio = ?, hora_fin = ?, duracion = ?, estado = ? WHERE id_reserva = ?";
         $stmt = $this->conexion->prepare($sql);
-        $stmt->bind_param("sssssi", $usuario->getNombre(), $usuario->getEmail(), $usuario->getTelefono(), $usuario->getPassword(), $usuario->getRol(), $usuario->getIdUsuario());
+        $stmt->bind_param("iisssisi", $reserva->getIdCancha(), $reserva->getIdUsuario(), $reserva->getFechaReserva(), $reserva->getHoraInicio(), $reserva->getHoraFin(), $reserva->getDuracion(), $reserva->getEstado(), $reserva->getIdReserva());
         return $stmt->execute();
     }
 
-    public function eliminarUsuario($id) {
-        $sql = "DELETE FROM usuarios WHERE id_usuario = ?";
+    public function eliminarReserva($id) {
+        $sql = "DELETE FROM reservas WHERE id_reserva = ?";
         $stmt = $this->conexion->prepare($sql);
         $stmt->bind_param("i", $id);
+        return $stmt->execute();
+    }
+
+    public function obtenerReservasUsuario($usuarioId) {
+        $sql = "SELECT r.*, c.nombre as cancha_nombre 
+                FROM reservas r 
+                JOIN canchas c ON r.id_cancha = c.id_cancha 
+                WHERE r.id_usuario = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $usuarioId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function listarSolicitudesPendientes() {
+        $sql = "SELECT r.*, c.nombre AS cancha_nombre, u.nombre AS usuario_nombre 
+                FROM reservas r 
+                JOIN canchas c ON r.id_cancha = c.id_cancha 
+                JOIN usuarios u ON r.id_usuario = u.id_usuario 
+                WHERE r.estado = 'pendiente'";
+        $result = $this->conexion->query($sql);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function aprobarReserva($idReserva) {
+        $sql = "UPDATE reservas SET estado = 'confirmada' WHERE id_reserva = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $idReserva);
+        $resultado = $stmt->execute();
+        if ($resultado) {
+            $this->registrarCambioEnHistorial($idReserva, "Reserva aprobada por el administrador.");
+        }
+        return $resultado;
+    }
+
+    public function rechazarReserva($idReserva) {
+        $sql = "UPDATE reservas SET estado = 'cancelada' WHERE id_reserva = ?";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("i", $idReserva);
+        $resultado = $stmt->execute();
+        if ($resultado) {
+            $this->registrarCambioEnHistorial($idReserva, "Reserva rechazada por el administrador.");
+        }
+        return $resultado;
+    }
+
+    public function registrarCambioEnHistorial($idReserva, $cambio) {
+        $sql = "INSERT INTO historialReservas (id_reserva, fecha_modificacion, cambio) VALUES (?, NOW(), ?)";
+        $stmt = $this->conexion->prepare($sql);
+        $stmt->bind_param("is", $idReserva, $cambio);
         return $stmt->execute();
     }
 }
