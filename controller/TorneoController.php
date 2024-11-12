@@ -178,7 +178,25 @@ class TorneoController {
         }
     }
 
-    public function eliminarParticipante($id_torneo, $id_usuario) {
+    public function esOrganizadorTorneo($id_torneo, $id_usuario) {
+        $query = "SELECT id FROM torneos WHERE id = ? AND id_usuario = ?";
+        $stmt = $this->conexion->cn()->prepare($query);
+        if ($stmt === false) {
+            error_log("Error al preparar la consulta: " . $this->conexion->cn()->error);
+            return false;
+        }
+        $stmt->bind_param("ii", $id_torneo, $id_usuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return $result->num_rows > 0;
+    }
+
+    public function eliminarParticipante($id_torneo, $id_usuario, $id_organizador) {
+        if (!$this->esOrganizadorTorneo($id_torneo, $id_organizador)) {
+            return ['success' => false, 'message' => 'No tienes permiso para eliminar participantes de este torneo.'];
+        }
+
         $query = "DELETE FROM participantes_torneo WHERE torneo_id = ? AND usuario_id = ?";
         $stmt = $this->conexion->cn()->prepare($query);
         if ($stmt === false) {
@@ -191,5 +209,31 @@ class TorneoController {
         } else {
             return ['success' => false, 'message' => 'Error al eliminar el participante: ' . $stmt->error];
         }
+    }
+
+    public function obtenerTorneosPorCancha($id_cancha) {
+        $query = "SELECT t.id, t.nombre, t.fecha, r.hora_inicio, r.hora_fin, u.nombre AS nombre_organizador
+                  FROM torneos t
+                  JOIN reservas r ON t.id_reserva = r.id_reserva
+                  JOIN usuarios u ON t.id_usuario = u.id_usuario
+                  WHERE t.id_cancha = ?
+                  ORDER BY t.fecha ASC, r.hora_inicio ASC";
+        
+        $stmt = $this->conexion->cn()->prepare($query);
+        if ($stmt === false) {
+            error_log("Error al preparar la consulta: " . $this->conexion->cn()->error);
+            return false;
+        }
+        
+        $stmt->bind_param("i", $id_cancha);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result === false) {
+            error_log("Error en la consulta SQL: " . $this->conexion->cn()->error);
+            return false;
+        }
+        
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 }

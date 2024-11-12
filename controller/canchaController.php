@@ -3,25 +3,34 @@ include($_SERVER['DOCUMENT_ROOT'] . '/AMACSS_SOFT41C-GP3/model/conexion.php');
 
 class CanchaController extends conexion {
 
-    // Método para listar canchas de un propietario específico
-    public function listar($usuarioId){
-        $sql = "SELECT * FROM canchas WHERE id_propietario = ?";
-        $stmt = $this->cn()->prepare($sql);
-        $stmt->bind_param("i", $usuarioId);
+    // Método para listar canchas de un propietario específico o todas las canchas
+    public function listar($usuarioId = null){
+        if ($usuarioId !== null) {
+            $sql = "SELECT * FROM canchas WHERE id_propietario = ?";
+            $stmt = $this->cn()->prepare($sql);
+            $stmt->bind_param("i", $usuarioId);
+        } else {
+            $sql = "SELECT * FROM canchas";
+            $stmt = $this->cn()->prepare($sql);
+        }
         $stmt->execute();
         $rs = $stmt->get_result();
         $resultado = array();
         while ($fila = $rs->fetch_assoc()) {
-            $resultado[] = new Cancha(
-                $fila["id_cancha"],
-                $fila["id_propietario"],
-                $fila["nombre"],
-                $fila["tipo"],
-                $fila["capacidad"],
-                $fila["descripcion"],
-                $fila["precio"],
-                $fila["urlImagen"]
-            );
+            if (class_exists('Cancha')) {
+                $resultado[] = new Cancha(
+                    $fila["id_cancha"],
+                    $fila["id_propietario"],
+                    $fila["nombre"],
+                    $fila["tipo"],
+                    $fila["capacidad"],
+                    $fila["descripcion"],
+                    $fila["precio"],
+                    $fila["urlImagen"]
+                );
+            } else {
+                $resultado[] = $fila;
+            }
         }
         $stmt->close();
         return $resultado;
