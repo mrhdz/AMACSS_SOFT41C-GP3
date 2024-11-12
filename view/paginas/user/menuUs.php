@@ -1,3 +1,20 @@
+<?php
+// Check if a session is already active before starting a new one
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once($_SERVER['DOCUMENT_ROOT'] . '/AMACSS_SOFT41C-GP3/controller/notificacionController.php');
+
+// Verificar si el usuario ha iniciado sesión
+if (!isset($_SESSION['usuario'])) {
+    header("Location: ../../login.php");
+    exit();
+}
+
+$notificacionController = new NotificacionController();
+$notificacionesNoLeidas = $notificacionController->contarNotificacionesNoLeidas($_SESSION['id_usuario']);
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,7 +47,7 @@
 
         .navbar {
             background: linear-gradient(135deg, var(--background-color), var(--primary-color));
-            padding: 15px 0;
+            padding: 10px 0;
             position: fixed;
             top: 0;
             left: 0;
@@ -44,9 +61,9 @@
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            padding: 0 20px;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
         }
 
         .navbar-logo {
@@ -55,12 +72,8 @@
             text-decoration: none;
         }
 
-        .navbar-logo:hover {
-            text-decoration: none;
-        }
-
         .navbar-logo img {
-            width: 50px;
+            width: 40px;
             height: auto;
             margin-right: 10px;
         }
@@ -68,48 +81,41 @@
         .navbar-logo span {
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
-            font-size: 24px;
+            font-size: 20px;
             color: var(--text-color);
-        }
-
-        .navbar-content {
-            display: flex;
-            align-items: center;
         }
 
         .navbar-menu {
             display: flex;
             align-items: center;
-            gap: 20px;
         }
 
         .navbar-menu a {
             color: var(--text-color);
             text-decoration: none;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 5px;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
+            font-size: 14px;
         }
 
         .navbar-menu a:hover {
             background-color: var(--hover-color);
-            transform: translateY(-2px);
         }
 
         .navbar-menu a i {
-            margin-right: 8px;
-            font-size: 1.2em;
+            margin-right: 6px;
+            font-size: 1.1em;
         }
 
         .navbar-user {
             position: relative;
-            margin-left: 20px;
         }
 
         .user-icon {
-            font-size: 24px;
+            font-size: 20px;
             color: var(--text-color);
             cursor: pointer;
             transition: all 0.3s ease;
@@ -118,7 +124,6 @@
         }
 
         .user-icon:hover {
-            transform: scale(1.1);
             background-color: var(--hover-color);
         }
 
@@ -129,7 +134,7 @@
             background-color: var(--background-color);
             border-radius: 5px;
             padding: 10px 0;
-            min-width: 200px;
+            min-width: 180px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             display: none;
             animation: fadeIn 0.3s ease;
@@ -147,10 +152,11 @@
         .user-menu a {
             display: flex;
             align-items: center;
-            padding: 10px 20px;
+            padding: 8px 15px;
             color: var(--text-color);
             text-decoration: none;
             transition: background-color 0.3s ease;
+            font-size: 14px;
         }
 
         .user-menu a:hover {
@@ -158,20 +164,21 @@
         }
 
         .user-menu a i {
-            margin-right: 10px;
-            font-size: 1.2em;
+            margin-right: 8px;
+            font-size: 1.1em;
         }
 
         .btn-logout {
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 15px;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
             display: flex;
             align-items: center;
             background-color: var(--background-color);
+            font-size: 14px;
         }
 
         .btn-logout:hover {
@@ -187,18 +194,16 @@
             cursor: pointer;
         }
 
-        @media (max-width: 768px) {
-            .navbar-container {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        .badge {
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
 
-            .navbar-content {
-                width: 100%;
-                justify-content: space-between;
-                margin-top: 10px;
-            }
-
+        @media (max-width: 1024px) {
             .navbar-menu {
                 display: none;
                 flex-direction: column;
@@ -214,8 +219,20 @@
                 display: flex;
             }
 
+            .navbar-menu a {
+                padding: 10px 15px;
+            }
+
             .navbar-toggle {
                 display: block;
+            }
+
+            .navbar-container {
+                flex-wrap: wrap;
+            }
+
+            .navbar-user {
+                margin-left: auto;
             }
         }
     </style>
@@ -228,22 +245,32 @@
                 <span>Sport Space</span>
             </a>
             
-            <div class="navbar-content">
-                <button class="navbar-toggle" id="navbar-toggle">
-                    <i class="bi bi-list"></i>
-                </button>
-                <div class="navbar-menu" id="navbar-menu">
-                    <a href="listacanchas.php"><i class="bi bi-calendar2-week"></i> Ver canchas</a>
-                    <a href="misreservas.php"><i class="bi bi-bookmark-check"></i> Mis reservas</a>
-                    <a href="acercade.php"><i class="bi bi-info-circle"></i> Acerca de Sport Space</a>
-                </div>
-                <div class="navbar-user">
-                    <i class="bi bi-person-circle user-icon" id="userMenuToggle"></i>
-                    <div class="user-menu" id="userMenu">
-                        <a href="#"><i class="bi bi-person"></i> Perfil</a>
-                        <a href="#"><i class="bi bi-gear"></i> Configuración</a>
-                        <a href="../../../inicio.php" class="btn-logout"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a>
-                    </div>
+            <button class="navbar-toggle" id="navbar-toggle">
+                <i class="bi bi-list"></i>
+            </button>
+            
+            <div class="navbar-menu" id="navbar-menu">
+                <a href="listacanchas.php"><i class="bi bi-calendar2-week"></i> Ver canchas</a>
+                <a href="misreservas.php"><i class="bi bi-bookmark-check"></i> Mis reservas</a>
+                <a href="mapa_canchas.php"><i class="bi bi-map"></i> Mapa</a>
+                <a href="crear_torneo.php"><i class="bi bi-trophy"></i> Crear Evento</a>
+                <a href="torneos.php"><i class="bi bi-calendar-event"></i> Torneos</a>
+                <a href="notificaciones_user.php">
+                    <i class="bi bi-bell"></i> Notificaciones
+                    <?php if ($notificacionesNoLeidas > 0): ?>
+                        <span class="badge"><?php echo $notificacionesNoLeidas; ?></span>
+                    <?php endif; ?>
+                </a>
+                <a href="faq.php"><i class="bi bi-question-circle"></i> FAQ</a>
+                <a href="acercade.php"><i class="bi bi-info-circle"></i> Acerca de</a>
+            </div>
+            
+            <div class="navbar-user">
+                <i class="bi bi-person-circle user-icon" id="userMenuToggle"></i>
+                <div class="user-menu" id="userMenu">
+                    <a href="#"><i class="bi bi-person"></i> Perfil</a>
+                    <a href="#"><i class="bi bi-gear"></i> Configuración</a>
+                    <a href="../../../inicio.php" class="btn-logout"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a>
                 </div>
             </div>
         </div>

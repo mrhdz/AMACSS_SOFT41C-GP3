@@ -64,6 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-family: 'Poppins', sans-serif;
             background-color: #e8f5e9;
             color: var(--dark-text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         .navbar {
@@ -160,7 +163,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: var(--background-color);
             color: var(--text-color);
             padding: 20px 0;
-            margin-top: 3rem;
+            margin-top: auto;
+        }
+
+        main {
+            flex: 1 0 auto;
         }
     </style>
 </head>
