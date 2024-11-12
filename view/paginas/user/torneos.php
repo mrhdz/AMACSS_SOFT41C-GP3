@@ -36,58 +36,132 @@ if (isset($_GET['id'])) {
     <title>Torneos - Sport Space</title>
     <link rel="icon" href="/AMACSS_SOFT41C-GP3/view/paginas/img/Logo blanco.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #45a049;
+            --accent-color: #FFF176;
+            --background-color: #2E7D32;
+            --text-color: #ffffff;
+            --dark-text: #212121;
+        }
+
         body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background-color: #e8f5e9;
+            color: var(--dark-text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
+
+        .container {
+            flex: 1 0 auto;
+        }
+
         .tournament-card {
-            transition: transform 0.3s ease-in-out;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .tournament-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
+
+        .card-title {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
         .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
+
         .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: scale(1.05);
         }
+
         #joinMessage {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(0, 123, 255, 0.9);
-            color: white;
+            background-color: var(--primary-color);
+            color: var(--text-color);
             padding: 20px;
-            border-radius: 10px;
+            border-radius: 15px;
             display: none;
             z-index: 1000;
             animation: fadeInOut 3s ease-in-out;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         @keyframes fadeInOut {
             0%, 100% { opacity: 0; }
             10%, 90% { opacity: 1; }
         }
+
         .footer {
-            background-color: #2E7D32;
-            color: #ffffff;
+            background-color: var(--background-color);
+            color: var(--text-color);
             padding: 20px 0;
             margin-top: auto;
+        }
+
+        .hero-section {
+            background-image: url('https://images.unsplash.com/photo-1459865264687-595d652de67e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 30vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <?php include 'menuUs.php'; ?>
 
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="display-4 fw-bold">Explora Nuestros Torneos</h1>
+            <p class="lead">Únete a emocionantes competiciones y demuestra tus habilidades</p>
+        </div>
+    </section>
+
     <div class="container my-5">
-        <h1 class="text-center mb-4">Torneos Disponibles</h1>
-        
-       
+        <h2 class="text-center mb-4">Torneos Disponibles</h2>
         
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <?php if ($torneos !== false && !empty($torneos)): ?>
@@ -97,13 +171,15 @@ if (isset($_GET['id'])) {
                             <div class="card-body">
                                 <h5 class="card-title"><?php echo htmlspecialchars($torneo['nombre'] ?? 'Torneo sin nombre'); ?></h5>
                                 <p class="card-text">
-                                    <strong>Fecha:</strong> <?php echo htmlspecialchars($torneo['fecha'] ?? 'Fecha no disponible'); ?><br>
-                                    <strong>Cancha:</strong> <?php echo htmlspecialchars($torneo['nombre_cancha'] ?? 'Cancha no especificada'); ?><br>
-                                    <strong>Organizador:</strong> <?php echo htmlspecialchars($torneo['nombre_usuario'] ?? 'Organizador desconocido'); ?>
+                                    <strong><i class="bi bi-calendar-event"></i> Fecha:</strong> <?php echo htmlspecialchars($torneo['fecha'] ?? 'Fecha no disponible'); ?><br>
+                                    <strong><i class="bi bi-geo-alt"></i> Cancha:</strong> <?php echo htmlspecialchars($torneo['nombre_cancha'] ?? 'Cancha no especificada'); ?><br>
+                                    <strong><i class="bi bi-person"></i> Organizador:</strong> <?php echo htmlspecialchars($torneo['nombre_usuario'] ?? 'Organizador desconocido'); ?>
                                 </p>
                             </div>
-                            <div class="card-footer">
-                                <button onclick="unirseAlTorneo(<?php echo htmlspecialchars($torneo['id']); ?>, '<?php echo htmlspecialchars(addslashes($torneo['nombre'])); ?>')" class="btn btn-primary w-100">Unirse al Torneo</button>
+                            <div class="card-footer bg-transparent border-top-0">
+                                <button onclick="unirseAlTorneo(<?php echo htmlspecialchars($torneo['id']); ?>, '<?php echo htmlspecialchars(addslashes($torneo['nombre'])); ?>')" class="btn btn-primary w-100">
+                                    <i class="bi bi-person-plus-fill me-2"></i>Unirse al Torneo
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -111,6 +187,7 @@ if (isset($_GET['id'])) {
             <?php else: ?>
                 <div class="col-12">
                     <div class="alert alert-info" role="alert">
+                        <i class="bi bi-info-circle-fill me-2"></i>
                         <?php if ($torneos === false): ?>
                             Ha ocurrido un error al obtener los torneos. Por favor, inténtelo de nuevo más tarde.
                         <?php else: ?>
@@ -129,6 +206,7 @@ if (isset($_GET['id'])) {
             <p>&copy; 2024 Sport Space. Todos los derechos reservados.</p>
         </div>
     </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     function unirseAlTorneo(idTorneo, nombreTorneo) {

@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $id_usuario = filter_input(INPUT_POST, 'id_usuario', FILTER_VALIDATE_INT);
 
                 if ($id_torneo && $id_usuario) {
-                    $result = $torneoController->eliminarParticipante($id_torneo, $id_usuario);
+                    $result = $torneoController->eliminarParticipante($id_torneo, $id_usuario, $_SESSION['id_usuario']);
                     if ($result['success']) {
                         $mensaje = $result['message'];
                     } else {
@@ -117,34 +117,111 @@ $misTorneos = $torneoController->obtenerTorneosCreados($_SESSION['id_usuario']);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #45a049;
+            --accent-color: #FFF176;
+            --background-color: #E8F5E9;
+            --text-color: #333333;
+        }
         body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background-color: #f8f9fa;
         }
         .container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            overflow-y: auto;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .card-header {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border-radius: 15px 15px 0 0;
+            padding: 1rem;
+        }
+        .form-control, .form-select {
+            border-radius: 10px;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        .table {
+            background-color: #ffffff;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .table th {
+            background-color: var(--primary-color);
+            color: #ffffff;
         }
         .footer {
-            background-color: #2E7D32;
+            background-color: var(--primary-color);
             color: #ffffff;
-            padding: 20px 0;
+            padding: 1rem 0;
             margin-top: auto;
         }
+       
+        .navbar-brand {
+            color: #ffffff !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .nav-link {
+            color: #ffffff !important;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+        .hero-section {
+            background-image: url('https://images.unsplash.com/photo-1529900748604-07564a03e7a6?q=80&w=1470&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .hero-title {
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+        }
+        
     </style>
 </head>
 <body>
-    <?php include 'menuUs.php'; ?>
+<header>
+        <?php require_once("menuUs.php"); ?>
+    </header>
+
+
+    <!-- Hero section -->
+    <div class="hero-section">
+        <h1 class="hero-title">Gestión de Torneos de Fútbol</h1>
+    </div>
 
     <div class="container">
-        <h1 class="text-center mb-4">Crear Nuevo Torneo</h1>
-        
         <?php if ($mensaje): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <?php echo htmlspecialchars($mensaje); ?>
@@ -158,80 +235,100 @@ $misTorneos = $torneoController->obtenerTorneosCreados($_SESSION['id_usuario']);
             </div>
         <?php endif; ?>
 
-        <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="needs-validation" novalidate>
-            <input type="hidden" name="action" value="crear">
-            <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre del Torneo</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" required minlength="3" maxlength="100">
-            </div>
-            <div class="mb-3">
-                <label for="fecha" class="form-label">Fecha del Torneo</label>
-                <input type="date" class="form-control" id="fecha" name="fecha" required min="<?php echo date('Y-m-d'); ?>">
-            </div>
-            <div class="mb-3">
-                <label for="id_cancha" class="form-label">Cancha</label>
-                <select class="form-select" id="id_cancha" name="id_cancha" required>
-                    <option value="">Selecciona una cancha</option>
-                    <?php
-                    $currentDate = '';
-                    foreach ($canchasDisponibles as $cancha):
-                        $canchaDate = date('Y-m-d', strtotime($cancha['fecha_reserva']));
-                        if ($canchaDate != $currentDate):
-                            if ($currentDate != '') echo '</optgroup>';
-                            echo '<optgroup label="' . date('d/m/Y', strtotime($canchaDate)) . '">';
-                            $currentDate = $canchaDate;
-                        endif;
-                    ?>
-                        <option value="<?php echo $cancha['id_cancha']; ?>" data-reserva="<?php echo $cancha['id_reserva']; ?>">
-                            <?php echo htmlspecialchars($cancha['cancha_nombre'] . ' - ' . $cancha['hora_inicio'] . ' - ' . $cancha['hora_fin']); ?>
-                        </option>
-                    <?php
-                    endforeach;
-                    if ($currentDate != '') echo '</optgroup>';
-                    ?>
-                </select>
-            </div>
-            <input type="hidden" id="id_reserva" name="id_reserva">
-           
-            <button type="submit" class="btn btn-primary">Crear Torneo</button>
-        </form>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title mb-0">Crear Nuevo Torneo</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="needs-validation" novalidate>
+                            <input type="hidden" name="action" value="crear">
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre del Torneo</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" required minlength="3" maxlength="100">
+                            </div>
+                            <div class="mb-3">
+                                <label for="fecha" class="form-label">Fecha del Torneo</label>
+                                <input type="date" class="form-control" id="fecha" name="fecha" required min="<?php echo date('Y-m-d'); ?>">
+                            </div>
+                            <div class="mb-3">
+                                <label for="id_cancha" class="form-label">Cancha</label>
+                                <select class="form-select" id="id_cancha" name="id_cancha" required>
+                                    <option value="">Selecciona una cancha</option>
+                                    <?php
+                                    $currentDate = '';
+                                    foreach ($canchasDisponibles as $cancha):
+                                        $canchaDate = date('Y-m-d', strtotime($cancha['fecha_reserva']));
+                                        if ($canchaDate != $currentDate):
+                                            if ($currentDate != '') echo '</optgroup>';
+                                            echo '<optgroup label="' . date('d/m/Y', strtotime($canchaDate)) . '">';
+                                            $currentDate = $canchaDate;
+                                        endif;
+                                    ?>
+                                        <option value="<?php echo $cancha['id_cancha']; ?>" data-reserva="<?php echo $cancha['id_reserva']; ?>">
+                                            <?php echo htmlspecialchars($cancha['cancha_nombre'] . ' - ' . $cancha['hora_inicio'] . ' - ' . $cancha['hora_fin'] . ' (Reserva aprobada)'); ?>
+                                        </option>
+                                    <?php
+                                    endforeach;
+                                    if ($currentDate != '') echo '</optgroup>';
+                                    ?>
+                                </select>
+                            </div>
+                            <input type="hidden" id="id_reserva" name="id_reserva">
 
-        <h2 class="mt-5 mb-3">Mis Torneos Creados</h2>
-        <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Fecha</th>
-                        <th>Cancha</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($misTorneos as $torneo): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($torneo['nombre']); ?></td>
-                            <td><?php echo htmlspecialchars($torneo['fecha']); ?></td>
-                            <td><?php echo htmlspecialchars($torneo['nombre_cancha']); ?></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editarTorneoModal" data-id="<?php echo $torneo['id']; ?>" data-nombre="<?php echo htmlspecialchars($torneo['nombre']); ?>" data-fecha="<?php echo $torneo['fecha']; ?>">
-                                    <i class="bi bi-pencil"></i>
-                                </button>
-                                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" style="display: inline;">
-                                    <input type="hidden" name="action" value="eliminar">
-                                    <input type="hidden" name="id_torneo" value="<?php echo $torneo['id']; ?>">
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este torneo?');">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#verParticipantesModal" data-id="<?php echo $torneo['id']; ?>" data-nombre="<?php echo htmlspecialchars($torneo['nombre']); ?>">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-plus-circle me-2"></i>Crear Torneo
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title mb-0">Mis Torneos Creados</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Fecha</th>
+                                        <th>Cancha</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($misTorneos as $torneo): ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($torneo['nombre']); ?></td>
+                                            <td><?php echo htmlspecialchars($torneo['fecha']); ?></td>
+                                            <td><?php echo htmlspecialchars($torneo['nombre_cancha']); ?></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editarTorneoModal" data-id="<?php echo $torneo['id']; ?>" data-nombre="<?php echo htmlspecialchars($torneo['nombre']); ?>" data-fecha="<?php echo $torneo['fecha']; ?>">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" style="display: inline;">
+                                                    <input type="hidden" name="action" value="eliminar">
+                                                    <input type="hidden" name="id_torneo" value="<?php echo $torneo['id']; ?>">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este torneo?');">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#verParticipantesModal" data-id="<?php echo $torneo['id']; ?>" data-nombre="<?php echo htmlspecialchars($torneo['nombre']); ?>">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -322,12 +419,12 @@ $misTorneos = $torneoController->obtenerTorneosCreados($_SESSION['id_usuario']);
             var id = button.getAttribute('data-id')
             var nombre = button.getAttribute('data-nombre')
             var fecha = button.getAttribute('data-fecha')
-            
+
             var modalTitle = editarTorneoModal.querySelector('.modal-title')
             var idInput = editarTorneoModal.querySelector('#editTorneoId')
             var nombreInput = editarTorneoModal.querySelector('#editNombre')
             var fechaInput = editarTorneoModal.querySelector('#editFecha')
-            
+
             modalTitle.textContent = 'Editar Torneo: ' + nombre
             idInput.value = id
             nombreInput.value = nombre
@@ -340,15 +437,15 @@ $misTorneos = $torneoController->obtenerTorneosCreados($_SESSION['id_usuario']);
             var button = event.relatedTarget
             var id = button.getAttribute('data-id')
             var nombre = button.getAttribute('data-nombre')
-            
+
             var modalTitle = verParticipantesModal.querySelector('.modal-title')
             var nombreTorneo = verParticipantesModal.querySelector('#nombreTorneo')
             var listaParticipantes = verParticipantesModal.querySelector('#listaParticipantes')
-            
+
             modalTitle.textContent = 'Participantes del Torneo'
             nombreTorneo.textContent = nombre
             listaParticipantes.innerHTML = '<li class="list-group-item">Cargando participantes...</li>'
-            
+
             fetch('obtener_participantes.php?id_torneo=' + id)
                 .then(response => response.json())
                 .then(data => {
